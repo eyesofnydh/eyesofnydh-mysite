@@ -251,6 +251,7 @@ const motionAllowed = () => !isIOSDevice && !matchMedia('(prefers-reduced-motion
   function setOpen(open, restoreFocus = false) {
     if(open)root.classList.remove('is-minimized');
     root.classList.toggle('is-open',open);
+    document.body.classList.toggle('lens-menu-open',open&&mobile.matches);
     options.inert = !open;
     options.setAttribute('aria-hidden',String(!open));
     toggle.setAttribute('aria-expanded',String(open));
