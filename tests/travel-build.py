@@ -42,6 +42,13 @@ class TravelBuildTests(unittest.TestCase):
         self.assertIn('&lt;script&gt;opinion&lt;/script&gt;',output)
         self.assertNotIn('<script>opinion</script>',output)
 
+    def test_trip_folders_render_image_windows_and_peeks(self):
+        output = travel.render({'trips':[{'id':'coast','name':'Coast','region':'Kerala','cover':'f4.png','photos':['f4.png','fp2.png']} ]})
+        self.assertIn('class="trip-peek"',output)
+        self.assertEqual(output.count('class="trip-media-window"'),2)
+        self.assertEqual(output.count('class="trip-window-close"'),2)
+        self.assertIn('--window-rotate:',output)
+
     def test_single_destination_and_hemispheres(self):
         output = travel.travel_map(travel.normalize({'destinations':[{'destination':'Somewhere','coordinates':{'lat':-12,'lng':-70}}]}))
         self.assertIn('left:50.00%;top:50.00%',output)

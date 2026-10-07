@@ -200,6 +200,18 @@
 // Native folders work without JavaScript. Numbered stops also support deep links.
 (() => {
   const folders = [...document.querySelectorAll('.trip-folder')];
+  document.documentElement.classList.add('media-folders-ready');
+  function preload(folder) {
+    if (folder.dataset.preloaded) return;
+    folder.dataset.preloaded = 'true';
+    folder.querySelectorAll('.trip-frames a').forEach(link => { const image = new Image(); image.src = link.href; });
+  }
+  function closeFolder(folder, returnFocus = false) {
+    if (!folder.open) return;
+    folder.open = false;
+    folder.querySelectorAll('.trip-media-window').forEach(item => item.classList.remove('is-closed'));
+    if (returnFocus) folder.querySelector('summary').focus({preventScroll:true});
+  }
   function revealTrip() {
     const folder = folders.find(item => `#${item.id}` === location.hash);
     if (!folder) return;
@@ -210,14 +222,31 @@
     const link = document.querySelector(`.trip-trail a[href="#${folder.id}"]`);
     link?.toggleAttribute('data-open',folder.open);
     folder.querySelector('.trip-open-label').textContent = folder.open ? 'Close folder' : 'Open folder';
+    if (folder.open) {
+      preload(folder);
+      folder.querySelectorAll('.trip-media-window').forEach(item => item.classList.remove('is-closed'));
+    }
     if (folder.open && !document.body.classList.contains('motion-paused') && !document.documentElement.classList.contains('is-ios')) {
-      folder.querySelector('.trip-folder-content').animate([{opacity:0,transform:'translateY(10px)'},{opacity:1,transform:'none'}],{duration:380,easing:'ease-out'});
+      folder.querySelectorAll('.trip-media-window').forEach((item,index)=>item.animate(
+        [{opacity:0,transform:'translate(-50%,18px) scale(.9) rotate(0deg)'},{opacity:1,transform:`translate(calc(-50% + ${getComputedStyle(item).getPropertyValue('--window-x')}),${getComputedStyle(item).getPropertyValue('--window-y')}) rotate(${getComputedStyle(item).getPropertyValue('--window-rotate')})`}],
+        {duration:520,delay:index*100,easing:'cubic-bezier(.16,1,.3,1)',fill:'backwards'}));
     }
   }));
+  folders.forEach(folder => {
+    const summary=folder.querySelector('summary');
+    summary.addEventListener('pointerenter',()=>preload(folder),{once:true});
+    summary.addEventListener('focus',()=>preload(folder),{once:true});
+    folder.querySelectorAll('.trip-window-close').forEach(button=>{
+      button.hidden=false;
+      button.addEventListener('click',event=>{event.preventDefault();event.stopPropagation();button.closest('.trip-media-window').classList.add('is-closed');});
+    });
+  });
   document.querySelectorAll('.trip-trail a').forEach(link => link.addEventListener('click', () => {
     const folder = folders.find(item => `#${item.id}` === link.hash);
     if (folder) folder.open = true;
   }));
+  document.addEventListener('pointerdown',event=>{if(!event.target.closest('.trip-folder,.trip-trail'))folders.forEach(folder=>closeFolder(folder));});
+  document.addEventListener('keydown',event=>{if(event.key!=='Escape')return;const open=folders.find(folder=>folder.open);if(open){event.preventDefault();closeFolder(open,true);}});
   addEventListener('hashchange',revealTrip);
   revealTrip();
 })();

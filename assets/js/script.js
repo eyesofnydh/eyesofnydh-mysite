@@ -77,7 +77,7 @@ const motionAllowed = () => !isIOSDevice && !matchMedia('(prefers-reduced-motion
   }));
   update();
 })();
-// Deliberately manual: visitors choose the pace of the photographic opening.
+// The photographic opening follows the page scroll and remains directly selectable.
 (() => {
   const scenes = [
     {file: 'f4.png', title: 'A world of green', alt: 'A quiet waterway through green fields and coconut palms beneath a Kerala sky'},
@@ -85,6 +85,8 @@ const motionAllowed = () => !isIOSDevice && !matchMedia('(prefers-reduced-motion
     {file: 'fp2.png', title: 'Together by the ocean', alt: 'Two people standing together on the beach beneath a pink sunset'}
   ];
   const image = document.querySelector('#scene-image');
+  const word = document.querySelector('#scene-word');
+  const hero = document.querySelector('.cinematic-hero');
   const choices = [...document.querySelectorAll('[data-scene]')];
   const controls = document.querySelector('.scene-selector');
   const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)');
@@ -94,10 +96,12 @@ const motionAllowed = () => !isIOSDevice && !matchMedia('(prefers-reduced-motion
     const scene = scenes[selected];
     window.setPhotoPreview(image, window.NYDH_PHOTOS.find(p=>p.file===scene.file), '(max-width: 760px) 100vw, 90vw');
     image.alt = scene.alt;
+    word.textContent = scene.title;
     document.querySelector('#scene-title').textContent = `${String(selected + 1).padStart(2, '0')} — ${scene.title}`;
     choices.forEach((button, i) => button.setAttribute('aria-pressed', String(i === selected)));
     image.getAnimations().forEach(animation => animation.cancel());
     if (motionAllowed()) image.animate([{clipPath: 'inset(0 100% 0 0)', transform: 'scale(1.08)'}, {clipPath: 'inset(0 0% 0 0)', transform: 'scale(1)'}], {duration: 850, easing: 'cubic-bezier(.2,.65,.3,1)'});
+    if (motionAllowed()) word.animate([{opacity:0,filter:'blur(14px)',transform:'translateY(20px)'},{opacity:.28,filter:'blur(0)',transform:'translateY(0)'}],{duration:720,easing:'cubic-bezier(.16,1,.3,1)'});
   }
   choices.forEach((button, index) => button.addEventListener('click', () => select(index)));
   document.querySelector('#scene-prev').addEventListener('click', () => select(selected - 1));
@@ -108,6 +112,19 @@ const motionAllowed = () => !isIOSDevice && !matchMedia('(prefers-reduced-motion
     select(selected + (event.key === 'ArrowRight' ? 1 : -1));
     choices[selected].focus();
   });
+  let sceneFrame = 0;
+  function syncSceneToScroll() {
+    cancelAnimationFrame(sceneFrame);
+    sceneFrame = requestAnimationFrame(() => {
+      if (!motionAllowed() || innerWidth <= 760) return;
+      const rect = hero.getBoundingClientRect();
+      const progress = Math.max(0,Math.min(.999,(-rect.top+innerHeight*.08)/(rect.height*.72)));
+      const index = Math.floor(progress*scenes.length);
+      if (index !== selected) select(index);
+    });
+  }
+  addEventListener('scroll',syncSceneToScroll,{passive:true});
+  controls.addEventListener('wheel',event=>{if(event.ctrlKey)return;const delta=Math.abs(event.deltaY)>Math.abs(event.deltaX)?event.deltaY:event.deltaX;if(Math.abs(delta)<8)return;event.preventDefault();select(selected+Math.sign(delta));choices[selected].focus({preventScroll:true});},{passive:false});
   reduceMotion.addEventListener('change', () => { if (reduceMotion.matches) image.getAnimations().forEach(animation => animation.cancel()); });
 })();
 

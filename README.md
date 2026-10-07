@@ -6,7 +6,8 @@ Nidhin Narayanan’s photography portfolio. Plain HTML, CSS, and JavaScript, wit
 
 - Mobile photography first, with camera photography and photo/video editing.
 - Scroll-linked desktop focus dial and rotating mobile lens menu, with keyboard controls and Escape dismissal.
-- A cinematic photo selector, photo stack, record shelf, photo wall, search, filters, saved photos, and shareable photo pages.
+- A scroll-linked cinematic hero, DNA-style 3D carousel, photo stack, record shelf, photo wall, search, filters, saved photos, and shareable photo pages.
+- A typography-led cursor image trail and image-only Travel folders with peeking, staggered polaroid windows.
 - Journey is a photo collection with optional short details and personal opinions, rather than a blog. It includes series filters, a show/hide notes control, and a keyboard/swipe photo viewer.
 - Subtle photo and section entrances, hover effects, Pause motion, and system reduced-motion support.
 - Existing photographs remain accessible without JavaScript. No client testimonials or unverified service promises are displayed.
