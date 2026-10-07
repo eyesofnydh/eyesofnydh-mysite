@@ -51,7 +51,7 @@
   75% { opacity:1; scale:1 }
   100% { opacity:0; scale:.85; translate:0 -4px }
 }
-button[aria-pressed],.filter-btn { position:relative }
+:where(button[aria-pressed],.filter-btn) { position:relative }
 
 /* Mobile Safari compatibility mode: keep the interface tactile, but avoid
    composited blur/transform stacks that stutter or leave layers misplaced. */
