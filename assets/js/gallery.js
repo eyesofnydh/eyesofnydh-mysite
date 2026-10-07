@@ -14,8 +14,9 @@
   const deck = document.querySelector('#archive-deck');
   const stage = document.querySelector('#deck-stage');
   const range = document.querySelector('#deck-range');
-  let mode = 'stack', deckIndex = 3, deckItems = [], deckFile = null;
-  try { const value = localStorage.getItem('nydh-gallery-mode'); if (['stack','shelf','grid'].includes(value)) mode = value; } catch {}
+  let mode = 'dna', deckIndex = 3, deckItems = [], deckFile = null;
+  let autoplay = false, autoplayTimer = 0;
+  try { const value = localStorage.getItem('nydh-gallery-mode'); if (['dna','stack','shelf','grid'].includes(value)) mode = value; } catch {}
 
   try {
     const stored = JSON.parse(localStorage.getItem('nydh-saved') || '[]');
@@ -56,7 +57,8 @@
   }
   function updateStatus() {
     const total = deckItems.length;
-    document.querySelector('#gallery-status').textContent = total ? (mode === 'grid' ? `${total} photographs · ${Math.min(limit,total)} on view` : `${total} photographs · ${mode === 'stack' ? 'Journal' : 'Record shelf'} · frame ${deckIndex+1} of ${total}`) : 'No photographs match. Try another search or turn off a filter.';
+    const labels = {dna:'DNA carousel',stack:'Journal',shelf:'Record shelf'};
+    document.querySelector('#gallery-status').textContent = total ? (mode === 'grid' ? `${total} photographs · ${Math.min(limit,total)} on view` : `${total} photographs · ${labels[mode]} · frame ${deckIndex+1} of ${total}`) : 'No photographs match. Try another search or turn off a filter.';
   }
   function showPhoto(items, index, trigger) {
     if (!items.length) return;
@@ -176,6 +178,7 @@
     deck.hidden = mode === 'grid';
     document.querySelector('.gallery-pagination').hidden = mode !== 'grid';
     deck.dataset.mode = mode;
+    stage.setAttribute('aria-label', mode === 'dna' ? 'DNA-inspired 3D photo carousel. Drag, swipe, scroll, or use the arrow keys to browse.' : `${mode === 'shelf' ? 'Record shelf' : 'Photo stack'}. Drag sideways or use the previous and next buttons.`);
 
     document.querySelector('#archive-count').textContent = `${deckItems.length} frames`;
     document.querySelectorAll('[data-layout]').forEach(button => button.setAttribute('aria-pressed',String(button.dataset.layout===mode)));
@@ -184,7 +187,7 @@
   function paintDeck(position = deckIndex) {
     const count = deckItems.length;
     const width = stage.clientWidth;
-    const cardWidth = Math.min(340, width * .62);
+    const cardWidth = mode === 'dna' ? Math.min(320, width * (width < 600 ? .58 : .42)) : Math.min(340, width * .62);
     const spread = mode === 'shelf' ? Math.min(100,width*.15) : Math.min(58,width*.078);
     stage.style.setProperty('--deck-card-width',`${cardWidth}px`);
     [...stage.children].forEach((card,index) => {
@@ -193,14 +196,28 @@
       const distance = Math.abs(offset), direction = Math.sign(offset);
       const visible = distance <= Math.min(mode === 'shelf' ? 6 : 5,Math.floor(count/2));
       const selected = index === deckIndex;
-      const x = direction * (Math.min(distance,1)*cardWidth*(mode === 'shelf' ? .85 : .4) + Math.max(0,distance-1)*spread);
-      const y = distance*7;
-      const z = mode === 'shelf' ? -distance*45 : -distance*85;
-      const rotateY = mode === 'shelf' ? -direction*Math.min(distance*55,55) : -direction*Math.min(distance*10,24);
-      const rotateZ = direction*Math.min(distance,3);
-      card.style.transform = `translate(-50%,-50%) translate3d(${x}px,${y}px,${z}px) rotateY(${rotateY}deg) rotateZ(${rotateZ}deg)`;
+      let x, y, z, rotateY, rotateZ, scale = 1, opacity = visible ? 1 : 0, blur = 0;
+      if (mode === 'dna') {
+        const helixSpread = Math.min(148,width*.17), phase = offset*1.14;
+        x = direction * (Math.min(distance,1)*cardWidth*.58 + Math.max(0,distance-1)*helixSpread);
+        y = Math.sin(phase) * Math.min(54,width*.075);
+        z = (Math.cos(phase)-1)*88 - distance*32;
+        rotateY = Math.max(-42,Math.min(42,-offset*13));
+        rotateZ = -Math.sin(phase)*4.5;
+        scale = selected ? 1.06 : Math.max(.76,1-distance*.055);
+        opacity = visible ? Math.max(.2,1-distance*.14) : 0;
+        blur = selected ? 0 : Math.min(4,distance*.85);
+      } else {
+        x = direction * (Math.min(distance,1)*cardWidth*(mode === 'shelf' ? .85 : .4) + Math.max(0,distance-1)*spread);
+        y = distance*7;
+        z = mode === 'shelf' ? -distance*45 : -distance*85;
+        rotateY = mode === 'shelf' ? -direction*Math.min(distance*55,55) : -direction*Math.min(distance*10,24);
+        rotateZ = direction*Math.min(distance,3);
+      }
+      card.style.transform = `translate(-50%,-50%) translate3d(${x}px,${y}px,${z}px) rotateY(${rotateY}deg) rotateZ(${rotateZ}deg) scale(${scale})`;
       card.style.zIndex = String(100-Math.round(distance*10));
-      card.style.opacity = visible ? '1' : '0';
+      card.style.opacity = String(opacity);
+      card.style.filter = mode === 'dna' ? `blur(${blur}px) drop-shadow(${-direction*2}px 0 0 rgba(255,58,116,${selected?0:.22})) drop-shadow(${direction*2}px 0 0 rgba(40,238,255,${selected?0:.2}))` : '';
       card.style.visibility = visible ? 'visible' : 'hidden';
       card.style.pointerEvents = visible ? 'auto' : 'none';
       card.tabIndex = selected ? 0 : -1;
@@ -227,6 +244,7 @@
     deckIndex = ((index % deckItems.length) + deckItems.length) % deckItems.length;
     deckFile = deckItems[deckIndex].file;
     paintDeck(); updateDeckCaption();
+    restartAutoplay();
     if (focus) stage.children[deckIndex]?.focus({preventScroll:true});
   }
   function buildDeck(items) {
@@ -258,6 +276,21 @@
     try { localStorage.setItem('nydh-gallery-mode',mode); } catch {}
     applyMode();
   }));
+  const autoplayButton = document.querySelector('#deck-autoplay');
+  function restartAutoplay() {
+    clearInterval(autoplayTimer); autoplayTimer = 0;
+    if (!autoplay) return;
+    autoplayTimer = setInterval(() => {
+      if (mode === 'dna' && deckItems.length > 1 && motionAllowed() && !document.hidden && !stage.matches(':hover,:focus-within') && !stage.classList.contains('dragging')) selectDeck(deckIndex+1);
+    }, 3200);
+  }
+  autoplayButton.addEventListener('click',()=>{
+    autoplay = !autoplay;
+    autoplayButton.setAttribute('aria-pressed',String(autoplay));
+    autoplayButton.setAttribute('aria-label',autoplay?'Pause carousel autoplay':'Start carousel autoplay');
+    autoplayButton.textContent = autoplay ? 'Ⅱ Auto' : '▶ Auto';
+    restartAutoplay();
+  });
   document.querySelector('#deck-prev').addEventListener('click',()=>selectDeck(deckIndex-1));
   document.querySelector('#deck-next').addEventListener('click',()=>selectDeck(deckIndex+1));
   document.querySelector('#deck-open').addEventListener('click',e=>{ if(deckItems.length)showPhoto(deckItems,deckIndex,e.currentTarget); });
@@ -270,7 +303,7 @@
   let gesture=null, suppressClickUntil=0;
   stage.addEventListener('pointerdown',e=>{
     if(e.button!==0||!e.isPrimary||deckItems.length<2)return;
-    gesture={x:e.clientX,y:e.clientY,id:e.pointerId,dragging:false};
+    gesture={x:e.clientX,y:e.clientY,lastX:e.clientX,lastTime:performance.now(),velocity:0,id:e.pointerId,dragging:false};
   });
   stage.addEventListener('pointermove',e=>{
     if(!gesture||e.pointerId!==gesture.id)return;
@@ -278,24 +311,34 @@
     if(!gesture.dragging&&Math.abs(dx)>12&&Math.abs(dx)>Math.abs(dy)){
       gesture.dragging=true;stage.setPointerCapture(e.pointerId);stage.classList.add('dragging');
     }
-    if(gesture.dragging){e.preventDefault();paintDeck(deckIndex-dx/130);}
+    if(gesture.dragging){
+      e.preventDefault();
+      const now=performance.now(),elapsed=Math.max(1,now-gesture.lastTime);
+      gesture.velocity=(e.clientX-gesture.lastX)/elapsed;gesture.lastX=e.clientX;gesture.lastTime=now;
+      paintDeck(deckIndex-dx/(mode==='dna'?105:130));
+    }
   });
   function finishGesture(e,cancel=false){
     if(!gesture||e.pointerId!==gesture.id)return;
-    const wasDragging=gesture.dragging,dx=e.clientX-gesture.x;
+    const wasDragging=gesture.dragging,dx=e.clientX-gesture.x,velocity=gesture.velocity;
     gesture=null;stage.classList.remove('dragging');
     if(stage.hasPointerCapture(e.pointerId))stage.releasePointerCapture(e.pointerId);
-    if(wasDragging){suppressClickUntil=performance.now()+350;selectDeck(cancel?deckIndex:deckIndex+Math.round(-dx/130));}
+    if(wasDragging){
+      suppressClickUntil=performance.now()+350;
+      const step=mode==='dna'?105:130, momentum=cancel?0:velocity*170;
+      selectDeck(cancel?deckIndex:deckIndex+Math.round((-dx-momentum)/step));
+    }
   }
   stage.addEventListener('pointerup',e=>finishGesture(e));
   stage.addEventListener('pointercancel',e=>finishGesture(e,true));
   stage.addEventListener('click',e=>{if(performance.now()<suppressClickUntil){e.preventDefault();e.stopPropagation();}},true);
   let lastWheel=0;
   stage.addEventListener('wheel',e=>{
-    if(e.ctrlKey||(!e.shiftKey&&Math.abs(e.deltaX)<=Math.abs(e.deltaY))||deckItems.length<2)return;
+    if(e.ctrlKey||deckItems.length<2)return;
+    if(mode!=='dna'&&!e.shiftKey&&Math.abs(e.deltaX)<=Math.abs(e.deltaY))return;
     e.preventDefault();
     if(performance.now()-lastWheel<350)return;
-    const delta=e.shiftKey?e.deltaY:e.deltaX;
+    const delta=mode==='dna'?(Math.abs(e.deltaX)>Math.abs(e.deltaY)?e.deltaX:e.deltaY):(e.shiftKey?e.deltaY:e.deltaX);
     if(Math.abs(delta)<8)return;
     selectDeck(deckIndex+Math.sign(delta));lastWheel=performance.now();
   },{passive:false});
@@ -311,6 +354,58 @@
     const index=photos.findIndex(photo=>photo.file===button.dataset.photo);
     if(index>=0)showPhoto(photos,index,button);
   }));
+
+  const footerStage = document.querySelector('#footer-parallax-stage');
+  if (footerStage) {
+    const footerStatus = document.querySelector('#footer-gallery-status');
+    const footerAutoplay = document.querySelector('#footer-gallery-autoplay');
+    let footerIndex = 0, footerAuto = true, footerTimer = 0, footerGesture = null, footerSuppressClick = 0, footerWheel = 0;
+    const wrap = value => ((value % photos.length) + photos.length) % photos.length;
+    photos.forEach((photo,index)=>{
+      const card=document.createElement('button');card.className='parallax-card';card.type='button';
+      card.style.setProperty('--parallax-width',`${Math.max(205,Math.min(340,225+(photo.width/photo.height)*58))}px`);
+      const img=document.createElement('img');window.setPhotoPreview(img,photo,'(max-width: 760px) 72vw, 30vw');img.alt=photo.alt;img.loading='lazy';img.decoding='async';img.width=photo.width;img.height=photo.height;img.draggable=false;
+      const caption=document.createElement('span');caption.textContent=`${String(index+1).padStart(2,'0')} — ${photo.title}`;
+      card.append(img,caption);card.addEventListener('click',()=>{if(performance.now()>=footerSuppressClick)showPhoto(photos,index,card);});footerStage.append(card);
+    });
+    function paintFooter(position=footerIndex){
+      const width=footerStage.clientWidth,gap=Math.min(315,Math.max(170,width*.235));
+      [...footerStage.children].forEach((card,index)=>{
+        let offset=index-position;offset=((offset+photos.length/2)%photos.length+photos.length)%photos.length-photos.length/2;
+        const distance=Math.abs(offset),visible=distance<=Math.min(5,Math.floor(photos.length/2));
+        const x=offset*gap,y=Math.sin(offset*.82)*26,z=-distance*58,rotateY=Math.max(-28,Math.min(28,-offset*7));
+        card.style.transform=`translate(-50%,-50%) translate3d(${x}px,${y}px,${z}px) rotateY(${rotateY}deg) scale(${Math.max(.78,1-distance*.045)})`;
+        card.style.opacity=visible?String(Math.max(.22,1-distance*.13)):'0';card.style.visibility=visible?'visible':'hidden';card.style.pointerEvents=visible?'auto':'none';card.style.zIndex=String(50-Math.round(distance*5));
+        card.style.filter=`grayscale(${Math.min(.72,distance*.18)}) blur(${Math.min(2.4,distance*.42)}px)`;
+        card.tabIndex=index===footerIndex?0:-1;card.setAttribute('aria-current',String(index===footerIndex));card.setAttribute('aria-label',`${index===footerIndex?'Open':'View'} ${photos[index].title}`);
+        card.querySelector('img').style.transform=`translate3d(${-offset*13}px,${Math.cos(offset*.7)*5}px,0) scale(${index===footerIndex?1.04:1})`;
+      });
+      footerStatus.textContent=`${String(footerIndex+1).padStart(2,'0')} / ${String(photos.length).padStart(2,'0')} · ${photos[footerIndex].title}`;
+    }
+    function selectFooter(index,focus=false){footerIndex=wrap(index);paintFooter();if(focus)footerStage.children[footerIndex]?.focus({preventScroll:true});}
+    function restartFooterAuto(){
+      clearInterval(footerTimer);footerTimer=0;if(!footerAuto)return;
+      footerTimer=setInterval(()=>{if(motionAllowed()&&!document.hidden&&!footerStage.matches(':hover,:focus-within')&&!footerStage.classList.contains('dragging'))selectFooter(footerIndex+1);},3600);
+    }
+    document.querySelector('#footer-gallery-prev').addEventListener('click',()=>{selectFooter(footerIndex-1);restartFooterAuto();});
+    document.querySelector('#footer-gallery-next').addEventListener('click',()=>{selectFooter(footerIndex+1);restartFooterAuto();});
+    footerAutoplay.addEventListener('click',()=>{footerAuto=!footerAuto;footerAutoplay.setAttribute('aria-pressed',String(footerAuto));footerAutoplay.setAttribute('aria-label',footerAuto?'Pause footer gallery autoplay':'Start footer gallery autoplay');footerAutoplay.textContent=footerAuto?'Ⅱ Auto':'▶ Auto';restartFooterAuto();});
+    footerStage.addEventListener('keydown',event=>{if(!['ArrowLeft','ArrowRight','Home','End'].includes(event.key))return;event.preventDefault();selectFooter(event.key==='Home'?0:event.key==='End'?photos.length-1:footerIndex+(event.key==='ArrowRight'?1:-1),true);restartFooterAuto();});
+    footerStage.addEventListener('pointerdown',event=>{if(event.button!==0||!event.isPrimary)return;footerGesture={x:event.clientX,y:event.clientY,lastX:event.clientX,lastTime:performance.now(),velocity:0,id:event.pointerId,dragging:false};});
+    footerStage.addEventListener('pointermove',event=>{
+      if(!footerGesture||event.pointerId!==footerGesture.id)return;const dx=event.clientX-footerGesture.x,dy=event.clientY-footerGesture.y;
+      if(!footerGesture.dragging&&Math.abs(dx)>10&&Math.abs(dx)>Math.abs(dy)){footerGesture.dragging=true;footerStage.setPointerCapture(event.pointerId);footerStage.classList.add('dragging');}
+      if(footerGesture.dragging){event.preventDefault();const now=performance.now(),elapsed=Math.max(1,now-footerGesture.lastTime);footerGesture.velocity=(event.clientX-footerGesture.lastX)/elapsed;footerGesture.lastX=event.clientX;footerGesture.lastTime=now;paintFooter(footerIndex-dx/150);}
+    });
+    function finishFooterGesture(event,cancel=false){
+      if(!footerGesture||event.pointerId!==footerGesture.id)return;const dragged=footerGesture.dragging,dx=event.clientX-footerGesture.x,velocity=footerGesture.velocity;footerGesture=null;footerStage.classList.remove('dragging');if(footerStage.hasPointerCapture(event.pointerId))footerStage.releasePointerCapture(event.pointerId);
+      if(dragged){footerSuppressClick=performance.now()+350;selectFooter(cancel?footerIndex:footerIndex+Math.round((-dx-velocity*180)/150));restartFooterAuto();}
+    }
+    footerStage.addEventListener('pointerup',event=>finishFooterGesture(event));footerStage.addEventListener('pointercancel',event=>finishFooterGesture(event,true));
+    footerStage.addEventListener('wheel',event=>{if(event.ctrlKey)return;const delta=Math.abs(event.deltaX)>Math.abs(event.deltaY)?event.deltaX:event.deltaY;if(Math.abs(delta)<8)return;event.preventDefault();if(performance.now()-footerWheel<320)return;selectFooter(footerIndex+Math.sign(delta));footerWheel=performance.now();restartFooterAuto();},{passive:false});
+    new ResizeObserver(()=>paintFooter()).observe(footerStage);paintFooter();restartFooterAuto();
+    const softWords=document.querySelector('.soft-words');new IntersectionObserver(entries=>{if(entries.some(entry=>entry.isIntersecting)){softWords.classList.add('is-in-view');}}, {threshold:.35}).observe(softWords);
+  }
 
   document.querySelector('.archive-tools').open = mode === 'grid';
   document.querySelector('#deck-reset').addEventListener('click', resetFilters);
