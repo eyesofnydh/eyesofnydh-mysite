@@ -7,12 +7,13 @@ const {chromium}=require(process.env.PLAYWRIGHT_MODULE||'playwright');
   assert.equal(await page.locator('link[rel=canonical]').getAttribute('href'),'https://eyesofnydh.netlify.app'+(path==='/'?'/':'/travel.html'));
   for(const width of [320,375,390,414,768,1024,1440,1920]){
    await page.setViewportSize({width,height:1000});
-   const selector=path==='/'?'#motion-toggle':'.journey-motion';
-   for(const reduced of ['no-preference','reduce']){
-    await page.emulateMedia({reducedMotion:reduced});
-    await page.waitForFunction(({selector,reduced})=>document.querySelector(selector).textContent===(reduced==='reduce'?'Reduced motion':'Pause motion'),{selector,reduced});
-    const fits=await page.locator(selector).evaluate(button=>{const box=button.getBoundingClientRect(),r=document.createRange();r.selectNodeContents(button);const text=r.getBoundingClientRect();return text.left>=box.left+2&&text.right<=box.right-2&&text.top>=box.top&&text.bottom<=box.bottom;});
-    assert.ok(fits,`motion label outside button ${path} ${width} ${reduced}`);
+   if(path==='/'){
+    for(const reduced of ['no-preference','reduce']){
+     await page.emulateMedia({reducedMotion:reduced});
+     await page.waitForFunction(reduced=>document.querySelector('#motion-toggle').textContent===(reduced==='reduce'?'Reduced motion':'Pause motion'),reduced);
+     const fits=await page.locator('#motion-toggle').evaluate(button=>{const box=button.getBoundingClientRect(),r=document.createRange();r.selectNodeContents(button);const text=r.getBoundingClientRect();return text.left>=box.left+2&&text.right<=box.right-2&&text.top>=box.top&&text.bottom<=box.bottom;});
+     assert.ok(fits,`motion label outside button ${path} ${width} ${reduced}`);
+    }
    }
    assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),`overflow ${path} ${width}`);
    assert.ok((await page.locator('.wordmark').first().textContent()).startsWith('eyesofnydh'));
@@ -25,5 +26,5 @@ const {chromium}=require(process.env.PLAYWRIGHT_MODULE||'playwright');
  }
  const robots=await page.request.get(base+'/robots.txt');assert.ok((await robots.text()).includes('https://eyesofnydh.netlify.app/sitemap.xml'));
  const sitemap=await page.request.get(base+'/sitemap.xml');assert.ok(!(await sitemap.text()).includes('https://nydh.netlify.app'));
- console.log('PASS: motion text containment, arrow alignment, compact gallery hint, unspaced branding and new-domain canonicals at eight screen widths.');
+ console.log('PASS: homepage motion text containment, travel arrow alignment, compact gallery hint, unspaced branding and new-domain canonicals at eight screen widths.');
 }finally{await browser.close()}})().catch(e=>{console.error(e);process.exit(1)});

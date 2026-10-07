@@ -9,19 +9,23 @@
   const motionAllowed = () => !isIOSDevice && !paused && !preference.matches;
   function syncMotion() {
     document.body.classList.toggle('motion-paused', isIOSDevice || paused || preference.matches);
-    toggle.textContent = isIOSDevice ? 'iOS motion safe' : preference.matches ? 'Reduced motion' : paused ? 'Enable motion' : 'Pause motion';
-    toggle.disabled = preference.matches || isIOSDevice;
-    toggle.setAttribute('aria-pressed', String(isIOSDevice || paused || preference.matches));
-    toggle.title = isIOSDevice ? 'Heavy effects are disabled on iOS so scrolling and controls stay smooth.' : '';
+    if (toggle) {
+      toggle.textContent = isIOSDevice ? 'iOS motion safe' : preference.matches ? 'Reduced motion' : paused ? 'Enable motion' : 'Pause motion';
+      toggle.disabled = preference.matches || isIOSDevice;
+      toggle.setAttribute('aria-pressed', String(isIOSDevice || paused || preference.matches));
+      toggle.title = isIOSDevice ? 'Heavy effects are disabled on iOS so scrolling and controls stay smooth.' : '';
+    }
     if (!motionAllowed()) document.getAnimations().forEach(animation => animation.cancel());
   }
-  toggle.hidden = false;
-  toggle.addEventListener('click', () => {
-    if (isIOSDevice) return;
-    paused = !paused;
-    try { localStorage.setItem('nydh-motion-paused', String(paused)); } catch {}
-    syncMotion();
-  });
+  if (toggle) {
+    toggle.hidden = false;
+    toggle.addEventListener('click', () => {
+      if (isIOSDevice) return;
+      paused = !paused;
+      try { localStorage.setItem('nydh-motion-paused', String(paused)); } catch {}
+      syncMotion();
+    });
+  }
   preference.addEventListener('change', syncMotion);
   syncMotion();
   document.querySelector('[data-year]').textContent = new Date().getFullYear();

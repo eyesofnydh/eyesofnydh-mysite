@@ -21,6 +21,10 @@ body:not(.journey-page) .container { width:min(1400px,calc(100% - 96px)); margin
   .focus-dial.active .dial-window { min-height:0; }
   .focus-dial.active a { height:64px; min-height:64px; }
   .focus-dial.active .dial-footer { padding:12px 0 0; }
+  .focus-dial.active { overflow:hidden; }
+  .focus-dial.active .dial-window { overflow-y:auto; overflow-x:hidden; scrollbar-width:none; overscroll-behavior:contain; }
+  .focus-dial.active .dial-window::-webkit-scrollbar { display:none; width:0; height:0; }
+  .focus-dial.active .dial-track,.focus-dial.active a { min-width:0; }
 }
 @media(min-width:761px) and (max-width:1024px) {
   /* On tablet-width layouts, keep the narrow scroll dial out of the content.
@@ -394,4 +398,176 @@ body:not(.journey-page) .container { width:min(1400px,calc(100% - 96px)); margin
   .lens-options a { min-height:54px; padding:8px 10px; }
   .lens-toggle { width:58px; height:58px; bottom:10px; }
   .lens-button-label { font-size:8px; }
+}
+
+/* Flowing lens navigation: the controls travel out of the aperture and settle
+   on one continuous orbit instead of forming a conventional app grid. */
+@media(max-width:760px) {
+  .mobile-lens.is-open {
+    width:min(360px,calc(100vw - 16px));
+    height:334px;
+    bottom:calc(8px + env(safe-area-inset-bottom,0px));
+  }
+  .lens-fan {
+    inset:4px 0 18px;
+    border-color:#bdfff22e;
+    border-radius:180px 180px 30px 30px;
+    background:
+      radial-gradient(ellipse at 50% 105%,#22606b80 0%,#112d42ef 42%,#081627f5 72%),
+      linear-gradient(145deg,#24465eed,#06111ff7);
+    box-shadow:0 26px 70px #000b,inset 0 1px 0 #efffff24,inset 0 -45px 75px #0208148f;
+    clip-path:inset(78% 42% 2% round 50%);
+  }
+  .lens-fan::before {
+    inset:38px 22px -126px;
+    border:1px solid #8ffbea22;
+    border-bottom-color:transparent;
+    border-radius:50% 50% 0 0;
+    background:
+      repeating-radial-gradient(ellipse at 50% 100%,transparent 0 41px,#99fff00a 42px 43px),
+      conic-gradient(from 228deg at 50% 100%,transparent 0 20%,#64e6d619 28%,transparent 36% 64%,#64e6d619 72%,transparent 80%);
+  }
+  .lens-fan::after {
+    content:'QUICK FOCUS  /  06 SECTIONS';
+    top:38px;
+    left:50%;
+    width:max-content;
+    transform:translateX(-50%);
+    color:#bcd4dc;
+    letter-spacing:1.25px;
+  }
+  .is-open .lens-fan { clip-path:inset(0 round 180px 180px 30px 30px); }
+  .lens-options {
+    inset:0;
+    display:block;
+    overflow:visible;
+  }
+  .lens-options::before {
+    content:'';
+    position:absolute;
+    left:23px;
+    right:23px;
+    bottom:53px;
+    height:210px;
+    border:1px solid #87f5e621;
+    border-bottom-color:transparent;
+    border-radius:50% 50% 0 0;
+    opacity:0;
+    transform:scale(.72,.55) translateY(54px);
+    transform-origin:50% 100%;
+    transition:opacity .32s,transform .62s cubic-bezier(.16,1,.3,1);
+  }
+  .is-open .lens-options::before { opacity:1; transform:none; }
+  .lens-options a {
+    --lens-tilt:0deg;
+    position:absolute;
+    left:calc(50% + var(--lens-x));
+    bottom:calc(31px + var(--lens-rise));
+    width:70px;
+    min-height:52px;
+    padding:7px 5px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    gap:5px;
+    overflow:visible;
+    border:1px solid #d8ffff25;
+    border-radius:24px;
+    background:linear-gradient(145deg,#dfffff13,#a9e9ef08);
+    box-shadow:inset 0 1px 0 #ffffff12,0 9px 25px #0004;
+    color:#d8e8ee;
+    text-align:center;
+    font:600 11px/1.08 var(--sans);
+    visibility:hidden;
+    opacity:0;
+    transform:translate(-50%,calc(var(--lens-rise)*.72)) scale(.3) rotate(0deg);
+    transform-origin:50% 115%;
+    transition:opacity .24s,transform .62s cubic-bezier(.12,.82,.22,1),border-color .25s,background .25s,box-shadow .25s;
+  }
+  .lens-options a:nth-child(1) { --lens-tilt:-8deg; }
+  .lens-options a:nth-child(2) { --lens-tilt:-5deg; }
+  .lens-options a:nth-child(3) { --lens-tilt:-2deg; }
+  .lens-options a:nth-child(4) { --lens-tilt:2deg; }
+  .lens-options a:nth-child(5) { --lens-tilt:5deg; }
+  .lens-options a:nth-child(6) { --lens-tilt:8deg; }
+  .lens-options a::before {
+    inset:auto auto -8px 50%;
+    width:4px;
+    height:4px;
+    border-radius:50%;
+    background:#8bf9e8;
+    box-shadow:0 0 12px #61eadb;
+    opacity:.24;
+    transform:translateX(-50%);
+  }
+  .lens-options a::after {
+    content:'';
+    position:absolute;
+    left:50%;
+    bottom:-5px;
+    width:1px;
+    height:5px;
+    margin:0;
+    background:#8bf9e85c;
+    opacity:.45;
+    transform:none;
+  }
+  .lens-options a span {
+    display:block;
+    width:auto;
+    height:auto;
+    flex:0 0 auto;
+    border:0;
+    border-radius:0;
+    background:none;
+    color:#84a8b6;
+    font:600 8px/1 monospace;
+    letter-spacing:1px;
+  }
+  .lens-options a[aria-current] {
+    border-color:#9affebb0;
+    background:linear-gradient(145deg,#62e2d333,#71e7da12);
+    box-shadow:inset 0 1px 0 #effffb42,0 10px 28px #00101f73,0 0 22px #4be0d12d;
+    color:#effffb;
+  }
+  .lens-options a[aria-current]::before { opacity:1; }
+  .lens-options a[aria-current] span { color:#b9fff3; background:none; }
+  .lens-options a:is(:hover,:focus-visible) {
+    border-color:#a3fff095;
+    background:linear-gradient(145deg,#6ce7da3d,#73e6d713);
+    box-shadow:inset 0 1px 0 #effffb42,0 12px 30px #00101f80,0 0 20px #4be0d126;
+  }
+  .is-open .lens-options a {
+    visibility:visible;
+    opacity:1;
+    pointer-events:auto;
+    transform:translate(-50%,0) scale(1) rotate(var(--lens-tilt));
+    transition-delay:calc(70ms + var(--lens-order)*48ms);
+  }
+  .is-open .lens-options a:is(:hover,:focus-visible) { transform:translate(-50%,-5px) scale(1.04) rotate(0deg); }
+  .lens-toggle {
+    width:72px;
+    height:72px;
+    bottom:14px;
+  }
+  .is-open .lens-toggle { transform:translateX(-50%) scale(1.02); }
+}
+
+@media(max-width:350px) {
+  .lens-options a { width:64px; font-size:10px; }
+  .lens-options a:nth-child(1) { --lens-x:-108px!important; }
+  .lens-options a:nth-child(2) { --lens-x:-84px!important; }
+  .lens-options a:nth-child(3) { --lens-x:-32px!important; }
+  .lens-options a:nth-child(4) { --lens-x:32px!important; }
+  .lens-options a:nth-child(5) { --lens-x:84px!important; }
+  .lens-options a:nth-child(6) { --lens-x:108px!important; }
+}
+
+@media(max-width:760px) and (max-height:500px) {
+  .mobile-lens.is-open { height:334px; bottom:5px; }
+  .lens-fan::after { top:38px; }
+  .lens-options { inset:0; }
+  .lens-options a { min-height:50px; padding:6px 5px; }
+  .lens-toggle { width:62px; height:62px; bottom:10px; }
 }

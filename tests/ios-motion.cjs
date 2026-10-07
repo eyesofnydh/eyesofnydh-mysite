@@ -28,8 +28,8 @@ const {chromium} = require(process.env.PLAYWRIGHT_MODULE || 'playwright');
 
     await page.goto('http://localhost:4173/travel.html');
     assert(await page.locator('html').evaluate(element=>element.classList.contains('is-ios')));
-    assert.equal(await page.locator('.journey-motion').innerText(),'iOS motion safe');
-    assert(await page.locator('.journey-motion').isDisabled());
+    assert.equal(await page.locator('.journey-motion').count(),0);
+    assert(await page.locator('body').evaluate(element=>element.classList.contains('motion-paused')));
     assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));
 
     await page.goto('http://localhost:4173/photos/a-world-of-green.html');

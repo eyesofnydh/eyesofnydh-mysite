@@ -7,8 +7,7 @@
 .journey-page .journey-header { background: #101b30f5; }
 .journey-header .header-inner { height: 88px; }
 .journey-home { margin-left: auto; font-size: 14px; min-height: 44px; display: inline-flex; align-items: center; }
-.journey-motion,.journey-rail-controls button { min-height: 44px; min-width: 44px; border: 1px solid var(--line); border-radius: 30px; color: var(--ink); background: transparent; padding: 10px 16px; font-size: 13px; }
-.journey-motion:disabled { opacity: .75; cursor: default; }
+.journey-rail-controls button { min-height: 44px; min-width: 44px; border: 1px solid var(--line); border-radius: 30px; color: var(--ink); background: transparent; padding: 10px 16px; font-size: 13px; }
 .journey-draft { margin-top: 24px; border-left: 2px solid #b4f5ed; padding: 10px 16px; color: #b4f5ed; font: 11px/1.6 monospace; letter-spacing: 1px; }
 .journey-draft span { display: block; max-width: 850px; color: var(--muted); font: 13px/1.6 var(--sans); letter-spacing: 0; margin-top: 3px; }
 .journey-meta { font: 11px/1.7 monospace; letter-spacing: 1.7px; text-transform: uppercase; color: #b7cbd8; }
@@ -116,11 +115,10 @@
 @media(max-width:760px) {
   .journey-page { padding-bottom: 0; }
   .journey-page .container { width: calc(100% - 40px); }
-  .journey-header .header-inner { height: auto; min-height: 92px; flex-wrap: wrap; gap: 4px 15px; padding-block: 14px; }
+  .journey-header .header-inner { height: auto; min-height: 76px; flex-wrap: nowrap; gap: 12px; padding-block: 12px; }
   .journey-header .wordmark { font-size: 23px; }
   .journey-header .brand-dot { font-size: 23px; margin-left: 6px; }
   .journey-home { font-size: 12px; }
-  .journey-motion { min-height: 36px; font-size: 12px; padding: 5px 12px; margin-left: auto; }
   .journey-draft { margin-top: 18px; }
   .journey-intro { padding-top: 45px; }
   .journey-intro-top { display: block; }
@@ -218,12 +216,11 @@ html:has(.journey-page.motion-paused) { scroll-behavior: auto; }
 html:has(.journey-page) { scroll-padding-top: 0; }
 
 /* Treat the return arrow and its label as two aligned parts of one link. */
-.journey-home { gap: 8px; line-height: 1.4; white-space: nowrap; padding-block: 10px; }
+.journey-home { gap: 8px; line-height: 1.4; white-space: nowrap; padding: 9px 13px; border: 1px solid var(--line); border-radius: 999px; transition: color .2s,border-color .2s,background .2s; }
+.journey-home:is(:hover,:focus-visible) { color: #b4f5ed; border-color: #b4f5ed80; background: #b4f5ed0d; }
 .journey-back-arrow { display: inline-flex; align-items: center; justify-content: center; width: 20px; line-height: 1; font-size: 20px; }
-.journey-motion { flex-shrink: 0; white-space: nowrap; line-height: 1.4; }
 @media(max-width:760px) {
-  .journey-header .header-inner { display: grid; grid-template-columns: minmax(0,1fr) auto; gap: 6px 12px; }
-  .journey-header .wordmark { grid-column: 1 / -1; }
-  .journey-home { margin-left: 0; justify-self: start; font-size: 13px; }
-  .journey-motion { min-height: 44px; margin-left: 0; }
+  .journey-header .header-inner { display: flex; }
+  .journey-header .wordmark { min-width: 0; }
+  .journey-home { margin-left: auto; flex: 0 0 auto; font-size: 12px; }
 }

@@ -13,7 +13,7 @@ const {chromium}=require(process.env.PLAYWRIGHT_MODULE||'playwright');
  }
  await page.setViewportSize({width:390,height:844});await page.locator('#journey').evaluate(e=>e.scrollIntoView({block:'start'}));await page.locator('#journey img').evaluateAll(async imgs=>{for(const i of imgs)i.loading='eager';await Promise.all(imgs.map(i=>i.decode()));});await page.screenshot({path:'tests/journey-home-mobile.png'});
  await page.setViewportSize({width:1440,height:1000});await page.locator('#journey').evaluate(e=>e.scrollIntoView({block:'start'}));await page.screenshot({path:'tests/journey-home-desktop.png'});
- await page.locator('.journey-preview-cta').click();await page.locator('.journey-motion').waitFor();assert.equal(new URL(page.url()).pathname,'/travel.html');
+ await page.locator('.journey-preview-cta').click();await page.locator('.journey-home').waitFor();assert.equal(new URL(page.url()).pathname,'/travel.html');
  await page.goto(base);await page.locator('.journey-preview-chapters a').first().click();await page.waitForFunction(()=>document.querySelector('#story-waterways')?.open);
  assert.deepEqual(errors,[]);console.log('PASS: homepage Journey section/menu link at nine widths, non-overlapping header, preserved original sections, journal and story navigation.');
 }finally{await browser.close()}})().catch(e=>{console.error(e);process.exit(1)});
