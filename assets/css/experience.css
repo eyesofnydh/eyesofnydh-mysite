@@ -98,7 +98,7 @@ body {
 .contact h2 { font-size: clamp(36px,5vw,70px); font-weight: 400; }
 .contact-flower { transition: transform 1s cubic-bezier(.2,.8,.2,1); }
 .contact:hover .contact-flower { transform: rotate(90deg); }
-.media-trail { position:relative; isolation:isolate; min-height:560px; display:grid; place-items:center; overflow:hidden; border-block:1px solid #d5edff26; background:radial-gradient(circle at 50% 45%,#1d536b45,transparent 48%); }
+.media-trail { position:relative; isolation:isolate; width:100%; max-width:none; min-height:560px; padding-inline:clamp(20px,5vw,72px); display:grid; place-items:center; overflow:hidden; border-block:1px solid #d5edff26; background:radial-gradient(circle at 50% 45%,#1d536b45,transparent 48%); }
 .media-trail::before { content:''; position:absolute; inset:0; z-index:-2; opacity:.15; background-image:radial-gradient(#b6fff0 1px,transparent 1px); background-size:18px 18px; mask-image:radial-gradient(circle,#000,transparent 72%); }
 .media-trail-copy { position:relative; z-index:2; text-align:center; max-width:1080px; pointer-events:none; }
 .media-trail-copy h2 { font-size:clamp(54px,8.5vw,126px); line-height:.92; letter-spacing:-.065em; font-weight:450; color:#eefaff; }
