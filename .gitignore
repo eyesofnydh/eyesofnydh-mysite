@@ -6,3 +6,6 @@ __pycache__/
 
 # Windows Explorer metadata
 Thumbs.db
+
+# Local dependency installs
+node_modules/

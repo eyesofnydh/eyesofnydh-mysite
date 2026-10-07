@@ -62,7 +62,7 @@ const motionAllowed = () => !isIOSDevice && !matchMedia('(prefers-reduced-motion
     links.forEach((link,index) => {
       const distance = Math.abs(index-position);
       link.style.setProperty('--dial-scale', Math.max(.78,1-distance*.12));
-      link.style.setProperty('--dial-opacity', Math.max(.3,1-distance*.3));
+      link.style.setProperty('--dial-opacity', Math.max(.18,1-distance*.34));
     });
     document.dispatchEvent(new CustomEvent('nydh:section', {detail:{selected,position}}));
   }
@@ -272,6 +272,7 @@ const motionAllowed = () => !isIOSDevice && !matchMedia('(prefers-reduced-motion
   }
   function syncSection(selected,position=selected){
     root.style.setProperty('--lens-rotation',`${(motionAllowed()?position:selected)*(360/links.length)}deg`);
+    root.classList.toggle('is-at-contact',selected===links.length-1);
     links.forEach((link,index)=>{
       if(index===selected)link.setAttribute('aria-current','location');else link.removeAttribute('aria-current');
     });

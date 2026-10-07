@@ -22,6 +22,11 @@ body:not(.journey-page) .container { width:min(1400px,calc(100% - 96px)); margin
   .focus-dial.active a { height:64px; min-height:64px; }
   .focus-dial.active .dial-footer { padding:12px 0 0; }
 }
+@media(min-width:761px) and (max-width:1024px) {
+  /* On tablet-width layouts, keep the narrow scroll dial out of the content.
+     The header button still opens the full section menu. */
+  .focus-dial:not(.active) { opacity:0; visibility:hidden; pointer-events:none; }
+}
 .journey-page .container { width:min(1320px,calc(100% - 96px)); margin-inline:auto; }
 .journey-page main { overflow:visible; }
 .journey-intro { padding-top:48px; }
@@ -65,6 +70,11 @@ body:not(.journey-page) .container { width:min(1400px,calc(100% - 96px)); margin
   .journey-moments { grid-template-columns:repeat(2,minmax(0,1fr)); }
 }
 @media(max-width:760px) {
+  /* Keep one menu affordance visible at a time: the header at the top, then
+     the floating lens once the visitor has started scrolling. */
+  .mobile-lens:not(.is-minimized):not(.is-open) { opacity:0; pointer-events:none; visibility:hidden; }
+  .mobile-lens.is-at-contact:not(.is-open) { opacity:0; pointer-events:none; visibility:hidden; }
+  body:has(.mobile-lens.is-minimized:not(.is-at-contact)) .nav-open-btn { opacity:0; pointer-events:none; visibility:hidden; }
   body:not(.journey-page) .container,.journey-page .container,.journey-page .journey-nav { width:calc(100% - 40px); margin-inline:auto; }
   body:not(.journey-page) .header-inner { gap:8px; flex-wrap:nowrap; min-height:76px; padding-block:12px; }
   .header-inner .motion-toggle { font-size:10px; min-width:0; padding:8px; }
