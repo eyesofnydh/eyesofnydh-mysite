@@ -25,6 +25,7 @@ jobs:
           python tools/build-photo-pages.py --check
           python tools/build-seo.py --check
           python tests/travel-build.py
+          python tests/site-integrity.py
       - name: Install browser test runner
         run: |
           npm install --no-save playwright
@@ -41,3 +42,4 @@ jobs:
           node tests/improvements.cjs
           node tests/ios-motion.cjs
           node tests/safari.cjs
+          node tests/audit.cjs

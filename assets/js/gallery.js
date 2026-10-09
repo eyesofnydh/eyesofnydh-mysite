@@ -71,6 +71,8 @@
     syncSave(document.querySelector('#photo-save'), photo);
     document.querySelector('#share-status').textContent = '';
     document.querySelector('#share-link').hidden = true;
+    image.hidden = false;
+    document.querySelector('#photo-load-status').textContent = '';
     image.src = source(photo); image.alt = photo.alt || photo.title;
     document.querySelector('#photo-caption').textContent = photo.title;
     document.querySelector('#photo-position').textContent = `FRAME ${String(active + 1).padStart(2, '0')} / ${String(items.length).padStart(2, '0')}`;
@@ -161,6 +163,10 @@
   });
   let touchStart;
   const viewerImage = document.querySelector('#dialog-image');
+  viewerImage.addEventListener('error',()=>{
+    viewerImage.hidden = true;
+    document.querySelector('#photo-load-status').textContent = 'This photograph could not load. Try another frame, or reopen it when your connection returns.';
+  });
   viewerImage.addEventListener('touchstart',e=>{touchStart=e.touches.length===1?{x:e.touches[0].clientX,y:e.touches[0].clientY}:null;},{passive:true});
   viewerImage.addEventListener('touchcancel',()=>{touchStart=null;});
   viewerImage.addEventListener('touchend',e=>{
@@ -282,7 +288,8 @@
     clearInterval(autoplayTimer); autoplayTimer = 0;
     if (!autoplay) return;
     autoplayTimer = setInterval(() => {
-      if (mode === 'dna' && deckItems.length > 1 && !matchMedia('(prefers-reduced-motion: reduce)').matches && !document.hidden && !stage.matches(':hover,:focus-within') && !stage.classList.contains('dragging')) selectDeck(deckIndex+1);
+      const bounds = stage.getBoundingClientRect();
+      if (mode === 'dna' && deckItems.length > 1 && !matchMedia('(prefers-reduced-motion: reduce)').matches && !document.hidden && !dialog.open && bounds.bottom > 0 && bounds.top < innerHeight && !stage.matches(':hover,:focus-within') && !stage.classList.contains('dragging')) selectDeck(deckIndex+1);
     }, 3200);
   }
   autoplayButton.addEventListener('click',()=>{
@@ -336,10 +343,10 @@
   let lastWheel=0;
   stage.addEventListener('wheel',e=>{
     if(e.ctrlKey||deckItems.length<2)return;
-    if(mode!=='dna'&&!e.shiftKey&&Math.abs(e.deltaX)<=Math.abs(e.deltaY))return;
+    if(!e.shiftKey&&Math.abs(e.deltaX)<=Math.abs(e.deltaY))return;
     e.preventDefault();
     if(performance.now()-lastWheel<350)return;
-    const delta=mode==='dna'?(Math.abs(e.deltaX)>Math.abs(e.deltaY)?e.deltaX:e.deltaY):(e.shiftKey?e.deltaY:e.deltaX);
+    const delta=e.shiftKey?e.deltaY:e.deltaX;
     if(Math.abs(delta)<8)return;
     selectDeck(deckIndex+Math.sign(delta));lastWheel=performance.now();
   },{passive:false});

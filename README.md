@@ -60,6 +60,8 @@ node tests/refinement.cjs
 node tests/gallery-ui.cjs
 node tests/safari.cjs
 node tests/improvements.cjs
+node tests/audit.cjs
+python tests/site-integrity.py
 python tests/travel-build.py
 python tools/build-travel.py --check
 python tools/build-seo.py --check
@@ -68,6 +70,8 @@ python tools/build-seo.py --check
 `refinement.cjs` covers mobile/desktop navigation, seven widths from 320 to 1920 pixels, short landscape screens, image loading, local anchors, search, viewers, Journey filters/notes, focus restoration, deep links, system reduced-motion changes, and JavaScript-free browsing. Screenshots are saved under `tests/` and ignored by Git.
 
 The gallery suites cover card layout, search recovery, saved photos, original-image viewing, sharing, blocked storage, and keyboard editing. `safari.cjs` checks WebKit and Chromium at five mobile widths, SVG icons, menu bounds, gallery gestures, and reduced motion. Older camera-dial, lens-fan, and travel-article suites describe the previous design; `refinement.cjs` replaces those design-specific checks.
+
+`audit.cjs` checks mobile menu focus, failed-image recovery, autoplay isolation, native page scrolling, and every photo page at narrow widths in Chromium and WebKit. `site-integrity.py` checks all published HTML links and media references. The latest findings and validation scope are recorded in `docs/quality-report.md`.
 
 ## Production
 

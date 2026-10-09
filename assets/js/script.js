@@ -248,7 +248,7 @@ const motionAllowed = () => !isIOSDevice && !matchMedia('(prefers-reduced-motion
       topToggle.setAttribute('aria-label',open ? 'Close menu' : 'Open menu');
       topToggle.querySelector('.menu-label').textContent=open ? 'Close' : 'Menu';
     }
-    if(restoreFocus)(mobile.matches ? toggle : topToggle).focus({preventScroll:true});
+    if(restoreFocus)topToggle.focus({preventScroll:true});
   }
   function syncMode(){
     const focusInside=root.contains(document.activeElement);
@@ -265,7 +265,10 @@ const motionAllowed = () => !isIOSDevice && !matchMedia('(prefers-reduced-motion
     });
     document.querySelector('#mobile-lens-caption').textContent=links[selected]?.textContent.replace(/^\s*\d+\s*/,'').trim() || 'Home';
   }
-  toggle.addEventListener('click',()=>setOpen(!root.classList.contains('is-open')));
+  toggle.addEventListener('click',()=>{
+    const open = !root.classList.contains('is-open');
+    setOpen(open,!open);
+  });
   links.forEach((link,index)=>{
     link.addEventListener('click',event=>{
       event.preventDefault();
@@ -281,6 +284,11 @@ const motionAllowed = () => !isIOSDevice && !matchMedia('(prefers-reduced-motion
   });
   toggle.addEventListener('keydown',e=>{
     if(e.key==='ArrowUp'||(e.key==='Tab'&&!e.shiftKey&&root.classList.contains('is-open'))){
+      e.preventDefault();setOpen(true);(links.find(link=>link.hasAttribute('aria-current'))||links[0]).focus();
+    }
+  });
+  topToggle.addEventListener('keydown',e=>{
+    if(mobile.matches&&e.key==='ArrowDown'){
       e.preventDefault();setOpen(true);(links.find(link=>link.hasAttribute('aria-current'))||links[0]).focus();
     }
   });
