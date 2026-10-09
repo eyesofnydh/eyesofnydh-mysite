@@ -23,7 +23,7 @@
     if (Array.isArray(stored)) saved = new Set(stored.filter(file => photos.some(p => p.file === file)));
   } catch {}
   function source(photo) { return photo.src || `./assets/images/${photo.file}`; }
-  function preview(photo, size = 800) { return `./assets/images/previews/${photo.file.replace('.png','')}-${size}.jpg`; }
+  function preview(photo, size = 800) { return `./assets/images/previews/${photo.file.replace(/\.[^.]+$/, '')}-${size}.jpg`; }
   function slug(photo) { return photo.title.toLowerCase().normalize('NFKD').replace(/[’']/g,'').replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,''); }
   function syncSave(button, photo) {
     button.disabled = !photo;

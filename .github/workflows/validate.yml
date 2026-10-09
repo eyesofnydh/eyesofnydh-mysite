@@ -22,6 +22,7 @@ jobs:
       - name: Check generated pages and metadata
         run: |
           python tools/build-travel.py --check
+          python tools/build-photo-pages.py --check
           python tools/build-seo.py --check
           python tests/travel-build.py
       - name: Install browser test runner

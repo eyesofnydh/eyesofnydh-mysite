@@ -22,7 +22,7 @@ def photo(file, *, eager=False, sizes='(max-width: 760px) 100vw, 50vw'):
     if not item:
         return '<div class="journey-missing" role="img" aria-label="Photograph not yet added">A photograph will live here.</div>'
     widths = [n for i, n in enumerate((320, 800, 1600)) if i == 0 or (320, 800, 1600)[i-1] < item['width']]
-    stem = file.removesuffix('.png')
+    stem = Path(file).stem
     candidates = ', '.join(f'./assets/images/previews/{stem}-{n}.jpg {min(n,item["width"])}w' for n in widths)
     for n in widths:
         if not (ROOT / f'assets/images/previews/{stem}-{n}.jpg').exists():

@@ -27,6 +27,18 @@
       <image:loc>https://eyesofnydh.netlify.app/assets/images/t3.png</image:loc>
     </image:image>
     <image:image>
+      <image:loc>https://eyesofnydh.netlify.app/assets/images/new-tea-country.jpg</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://eyesofnydh.netlify.app/assets/images/new-between-grass-and-clouds.jpg</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://eyesofnydh.netlify.app/assets/images/new-the-road-under-trees.jpg</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://eyesofnydh.netlify.app/assets/images/new-one-flower-on-the-water.jpg</image:loc>
+    </image:image>
+    <image:image>
       <image:loc>https://eyesofnydh.netlify.app/assets/images/t4.png</image:loc>
     </image:image>
     <image:image>
@@ -83,12 +95,93 @@
     <image:image>
       <image:loc>https://eyesofnydh.netlify.app/assets/images/t2.png</image:loc>
     </image:image>
+    <image:image>
+      <image:loc>https://eyesofnydh.netlify.app/assets/images/new-where-the-ridges-meet.jpg</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://eyesofnydh.netlify.app/assets/images/new-a-doorway-to-the-day.jpg</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://eyesofnydh.netlify.app/assets/images/new-the-road-can-wait.jpg</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://eyesofnydh.netlify.app/assets/images/new-light-in-the-ripples.jpg</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://eyesofnydh.netlify.app/assets/images/new-mountains-across-the-water.jpg</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://eyesofnydh.netlify.app/assets/images/new-two-cups-in-the-green.jpg</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://eyesofnydh.netlify.app/assets/images/new-a-pause-above-the-clouds.jpg</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://eyesofnydh.netlify.app/assets/images/new-the-valley-below.jpg</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://eyesofnydh.netlify.app/assets/images/new-passing-the-street-stall.jpg</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://eyesofnydh.netlify.app/assets/images/new-a-quiet-turn-in-the-water.jpg</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://eyesofnydh.netlify.app/assets/images/new-following-the-hill-path.jpg</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://eyesofnydh.netlify.app/assets/images/new-color-on-the-hillside.jpg</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://eyesofnydh.netlify.app/assets/images/new-parked-at-blue-hour.jpg</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://eyesofnydh.netlify.app/assets/images/new-the-small-procession.jpg</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://eyesofnydh.netlify.app/assets/images/new-when-the-valley-disappears.jpg</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://eyesofnydh.netlify.app/assets/images/new-the-blue-house-in-the-fields.jpg</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://eyesofnydh.netlify.app/assets/images/new-beneath-the-big-tree.jpg</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://eyesofnydh.netlify.app/assets/images/new-a-cup-and-a-field.jpg</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://eyesofnydh.netlify.app/assets/images/new-a-stop-along-the-way.jpg</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://eyesofnydh.netlify.app/assets/images/new-the-last-light-on-green.jpg</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://eyesofnydh.netlify.app/assets/images/new-down-the-green-path.jpg</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://eyesofnydh.netlify.app/assets/images/new-a-house-among-the-tea.jpg</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://eyesofnydh.netlify.app/assets/images/new-before-the-road-wakes.jpg</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://eyesofnydh.netlify.app/assets/images/new-two-wheels-by-the-sea.jpg</image:loc>
+    </image:image>
   </url>
   <url>
     <loc>https://eyesofnydh.netlify.app/travel.html</loc>
   </url>
   <url>
+    <loc>https://eyesofnydh.netlify.app/photos/a-cup-and-a-field.html</loc>
+  </url>
+  <url>
     <loc>https://eyesofnydh.netlify.app/photos/a-curious-visitor.html</loc>
+  </url>
+  <url>
+    <loc>https://eyesofnydh.netlify.app/photos/a-doorway-to-the-day.html</loc>
+  </url>
+  <url>
+    <loc>https://eyesofnydh.netlify.app/photos/a-house-among-the-tea.html</loc>
   </url>
   <url>
     <loc>https://eyesofnydh.netlify.app/photos/a-line-through-the-pink.html</loc>
@@ -97,10 +190,19 @@
     <loc>https://eyesofnydh.netlify.app/photos/a-palm-and-the-sky.html</loc>
   </url>
   <url>
+    <loc>https://eyesofnydh.netlify.app/photos/a-pause-above-the-clouds.html</loc>
+  </url>
+  <url>
     <loc>https://eyesofnydh.netlify.app/photos/a-place-to-pause.html</loc>
   </url>
   <url>
     <loc>https://eyesofnydh.netlify.app/photos/a-quiet-afternoon.html</loc>
+  </url>
+  <url>
+    <loc>https://eyesofnydh.netlify.app/photos/a-quiet-turn-in-the-water.html</loc>
+  </url>
+  <url>
+    <loc>https://eyesofnydh.netlify.app/photos/a-stop-along-the-way.html</loc>
   </url>
   <url>
     <loc>https://eyesofnydh.netlify.app/photos/a-world-of-green.html</loc>
@@ -118,25 +220,58 @@
     <loc>https://eyesofnydh.netlify.app/photos/at-the-waters-edge.html</loc>
   </url>
   <url>
+    <loc>https://eyesofnydh.netlify.app/photos/before-the-road-wakes.html</loc>
+  </url>
+  <url>
+    <loc>https://eyesofnydh.netlify.app/photos/beneath-the-big-tree.html</loc>
+  </url>
+  <url>
+    <loc>https://eyesofnydh.netlify.app/photos/between-grass-and-clouds.html</loc>
+  </url>
+  <url>
     <loc>https://eyesofnydh.netlify.app/photos/blue-hour-gatherings.html</loc>
+  </url>
+  <url>
+    <loc>https://eyesofnydh.netlify.app/photos/color-on-the-hillside.html</loc>
   </url>
   <url>
     <loc>https://eyesofnydh.netlify.app/photos/details-in-the-dark.html</loc>
   </url>
   <url>
+    <loc>https://eyesofnydh.netlify.app/photos/down-the-green-path.html</loc>
+  </url>
+  <url>
     <loc>https://eyesofnydh.netlify.app/photos/drawn-to-the-sea.html</loc>
+  </url>
+  <url>
+    <loc>https://eyesofnydh.netlify.app/photos/following-the-hill-path.html</loc>
   </url>
   <url>
     <loc>https://eyesofnydh.netlify.app/photos/just-us-and-the-horizon.html</loc>
   </url>
   <url>
+    <loc>https://eyesofnydh.netlify.app/photos/light-in-the-ripples.html</loc>
+  </url>
+  <url>
     <loc>https://eyesofnydh.netlify.app/photos/light-on-the-water.html</loc>
+  </url>
+  <url>
+    <loc>https://eyesofnydh.netlify.app/photos/mountains-across-the-water.html</loc>
   </url>
   <url>
     <loc>https://eyesofnydh.netlify.app/photos/natures-great-masterpiece.html</loc>
   </url>
   <url>
+    <loc>https://eyesofnydh.netlify.app/photos/one-flower-on-the-water.html</loc>
+  </url>
+  <url>
     <loc>https://eyesofnydh.netlify.app/photos/painted-traditions.html</loc>
+  </url>
+  <url>
+    <loc>https://eyesofnydh.netlify.app/photos/parked-at-blue-hour.html</loc>
+  </url>
+  <url>
+    <loc>https://eyesofnydh.netlify.app/photos/passing-the-street-stall.html</loc>
   </url>
   <url>
     <loc>https://eyesofnydh.netlify.app/photos/still-water-wild-green.html</loc>
@@ -145,13 +280,34 @@
     <loc>https://eyesofnydh.netlify.app/photos/stories-in-color.html</loc>
   </url>
   <url>
+    <loc>https://eyesofnydh.netlify.app/photos/tea-country.html</loc>
+  </url>
+  <url>
+    <loc>https://eyesofnydh.netlify.app/photos/the-blue-house-in-the-fields.html</loc>
+  </url>
+  <url>
     <loc>https://eyesofnydh.netlify.app/photos/the-green-way-home.html</loc>
   </url>
   <url>
     <loc>https://eyesofnydh.netlify.app/photos/the-journey-begins.html</loc>
   </url>
   <url>
+    <loc>https://eyesofnydh.netlify.app/photos/the-last-light-on-green.html</loc>
+  </url>
+  <url>
+    <loc>https://eyesofnydh.netlify.app/photos/the-road-can-wait.html</loc>
+  </url>
+  <url>
+    <loc>https://eyesofnydh.netlify.app/photos/the-road-under-trees.html</loc>
+  </url>
+  <url>
     <loc>https://eyesofnydh.netlify.app/photos/the-shape-of-the-tide.html</loc>
+  </url>
+  <url>
+    <loc>https://eyesofnydh.netlify.app/photos/the-small-procession.html</loc>
+  </url>
+  <url>
+    <loc>https://eyesofnydh.netlify.app/photos/the-valley-below.html</loc>
   </url>
   <url>
     <loc>https://eyesofnydh.netlify.app/photos/through-the-trees.html</loc>
@@ -160,10 +316,22 @@
     <loc>https://eyesofnydh.netlify.app/photos/together-by-the-ocean.html</loc>
   </url>
   <url>
+    <loc>https://eyesofnydh.netlify.app/photos/two-cups-in-the-green.html</loc>
+  </url>
+  <url>
+    <loc>https://eyesofnydh.netlify.app/photos/two-wheels-by-the-sea.html</loc>
+  </url>
+  <url>
     <loc>https://eyesofnydh.netlify.app/photos/under-a-crescent-moon.html</loc>
   </url>
   <url>
     <loc>https://eyesofnydh.netlify.app/photos/watching-the-day-disappear.html</loc>
+  </url>
+  <url>
+    <loc>https://eyesofnydh.netlify.app/photos/when-the-valley-disappears.html</loc>
+  </url>
+  <url>
+    <loc>https://eyesofnydh.netlify.app/photos/where-the-ridges-meet.html</loc>
   </url>
   <url>
     <loc>https://eyesofnydh.netlify.app/photos/where-the-shore-begins.html</loc>

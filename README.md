@@ -32,6 +32,8 @@ The generator updates `travel.html` and only the marked Journey preview in `inde
 
 The main collection uses `assets/js/photos.js`. Add the original image to `assets/images/`, describe it accurately, and generate responsive previews using `tools/build-previews.ps1`. Run `python tools/build-photo-pages.py` and `python tools/build-seo.py` to refresh durable photo pages and the sitemap.
 
+The collection supports PNG and JPEG images. The photo-page builder also refreshes the homepage gallery for visitors browsing without JavaScript. Curated `new-*.jpg` images have correctly oriented, optimized copies and three preview sizes; `assets/data/photo-selections.json` records their source filenames. Unselected source photographs are kept locally and are not published. Trip labels are added only after the locations are confirmed.
+
 Trip folders live in the `trips` list in `assets/data/travel.json`. Replace each `cover` and `photos` list with filenames from the photo collection, then set `placeholder` to `false` to remove the preview label. The numbered trail and homepage folder links are generated from that list. Run the travel builder after edits.
 
 Journey uses `assets/data/travel.json`. The `destinations` list groups images into series; each `photos` array contains filenames from the main collection. Stable IDs preserve existing Journey links. Existing series descriptions and short reflections appear beneath the first photograph in each series.
