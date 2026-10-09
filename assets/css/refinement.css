@@ -13,7 +13,7 @@ body:not(.journey-page) .container { width:min(1400px,calc(100% - 96px)); margin
 .service-grid article > span:not(.craft-symbol) { font:500 11px/1.4 var(--sans); letter-spacing:.12em; }
 .service-grid p { font-size:15px; }
 @media(min-width:761px) {
-  body:not(.journey-page) .container { width:min(1320px,calc(100% - 160px)); margin-left:max(32px,calc((100% - 1480px)/2)); }
+  body:not(.journey-page) .container { --page-gutter:clamp(24px,2.8vw,56px); width:min(1680px,calc(100% - var(--page-gutter)*2 - 88px)); margin-left:max(var(--page-gutter),calc((100% - 1768px)/2)); margin-right:auto; }
   .header .focus-dial { z-index:40; }
   .header .focus-dial.active { width:min(380px,calc(100vw - 40px)); }
   .focus-dial:not(.active) .dial-track { transition:transform .6s cubic-bezier(.22,1,.36,1); }
@@ -27,6 +27,7 @@ body:not(.journey-page) .container { width:min(1400px,calc(100% - 96px)); margin
   .focus-dial.active .dial-track,.focus-dial.active a { min-width:0; }
 }
 @media(min-width:761px) and (max-width:1024px) {
+  body:not(.journey-page) .container { width:calc(100% - 48px); margin-inline:auto; }
   /* On tablet-width layouts, keep the narrow scroll dial out of the content.
      The header button still opens the full section menu. */
   .focus-dial:not(.active) { opacity:0; visibility:hidden; pointer-events:none; }
@@ -607,7 +608,7 @@ html { -webkit-text-size-adjust:100%; text-size-adjust:100%; }
 
 /* A compact focus barrel, seen from the side, with a fixed selection pointer. */
 @media(min-width:761px) {
-  .header .focus-dial:not(.active) { width:72px; height:min(340px,calc(100dvh - 48px)); padding:14px 5px; border:1px solid #ffffff08; border-radius:12px; background:repeating-linear-gradient(0deg,#08090b 0 3px,#141517 3px 4px),#090a0c; box-shadow:inset 6px 0 14px #000b,inset -6px 0 14px #000b,0 10px 28px #0007; backdrop-filter:none; -webkit-backdrop-filter:none; }
+  .header .focus-dial:not(.active) { width:66px; height:min(304px,calc(100dvh - 48px)); right:14px; padding:14px 5px; border:1px solid #b8e8ed24; border-radius:16px; background:repeating-linear-gradient(0deg,transparent 0 3px,#c1edee0c 3px 4px),linear-gradient(90deg,#07121d,#1b3442 48%,#081520); background-position:0 var(--tick-offset,0),0 0; box-shadow:inset 2px 0 4px #bafaff14,inset -6px 0 14px #0009,0 10px 28px #0005; backdrop-filter:none; -webkit-backdrop-filter:none; }
   .focus-dial:not(.active) .dial-caption { display:none; }
   .focus-dial:not(.active) .dial-window { height:100%; flex:1; mask-image:linear-gradient(transparent,#000 20%,#000 80%,transparent); }
   .focus-dial:not(.active) .dial-track { top:calc(50% - 38px); }
@@ -615,11 +616,22 @@ html { -webkit-text-size-adjust:100%; text-size-adjust:100%; }
   .focus-dial:not(.active) a[aria-current] { color:#fff; background:none; }
   .focus-dial:not(.active) .dial-label { font-size:9px; font-weight:700; letter-spacing:1.8px; margin-left:30px; }
   .focus-dial:not(.active) .dial-stop { color:#77797d; left:11px; font-size:7px; }
-  .focus-dial:not(.active) .dial-marker { left:4px; right:4px; height:56px; border:0; background:none; }
+  .focus-dial:not(.active) .dial-marker { left:4px; right:4px; height:56px; border-block:1px solid #b5ede529; background:linear-gradient(90deg,#8aeee714,transparent); }
   .focus-dial:not(.active) .dial-marker::before { top:24px; left:0; border-left:7px solid white; border-top:5px solid transparent; border-bottom:5px solid transparent; filter:drop-shadow(0 0 3px #fff6); }
-  .focus-dial:not(.active) .dial-marker::after { content:''; position:absolute; left:-1px; top:-17px; width:24px; height:24px; background:linear-gradient(#f9c922,#f9c922) left top/8px 2px no-repeat,linear-gradient(#f9c922,#f9c922) left top/2px 8px no-repeat,linear-gradient(#f9c922,#f9c922) right top/8px 2px no-repeat,linear-gradient(#f9c922,#f9c922) right top/2px 8px no-repeat,linear-gradient(#f9c922,#f9c922) left bottom/8px 2px no-repeat,linear-gradient(#f9c922,#f9c922) left bottom/2px 8px no-repeat,linear-gradient(#f9c922,#f9c922) right bottom/8px 2px no-repeat,linear-gradient(#f9c922,#f9c922) right bottom/2px 8px no-repeat,radial-gradient(circle,#f9c922 0 2px,transparent 2.5px) center/100% 100% no-repeat; }
-  .header .focus-dial.active { width:min(288px,calc(100vw - 40px)); height:min(470px,calc(100dvh - 40px)); padding:20px; border-radius:16px; background:#101216; }
+  .focus-dial:not(.active) .dial-marker::after { content:none; }
+  .header .focus-dial.active { width:min(288px,calc(100vw - 40px)); height:min(470px,calc(100dvh - 40px)); padding:20px; border-radius:16px; border-color:#b8e8ed24; background:linear-gradient(125deg,#193144,#101d2c); }
   .focus-dial.active a { height:52px; min-height:52px; gap:12px; }
   .focus-dial.active .dial-label { font-size:21px; }
   .focus-dial.active a::after { margin-left:0; font-size:18px; }
+}
+
+/* Fill the desktop canvas while keeping prose comfortable to read. */
+@media(min-width:1025px) {
+  .section { padding-block:68px; }
+  .archive-section { padding-top:52px; }
+  .journey-preview { padding-block:60px; margin-block:24px; gap:40px; }
+  .about { grid-template-columns:minmax(280px,.8fr) minmax(0,1.2fr); gap:clamp(40px,5vw,80px); }
+  .portrait-wrap { max-width:560px; width:100%; }
+  .contact { padding-block:56px; }
+  .journey-page .container,.journey-page .journey-nav { width:min(1480px,calc(100% - 80px)); }
 }
