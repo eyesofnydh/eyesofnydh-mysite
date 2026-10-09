@@ -11,7 +11,7 @@ const { chromium } = require(process.env.PLAYWRIGHT_MODULE || 'playwright');
     await page.goto(base);
     await page.locator('#deck-save').click();
     assert.equal(await page.locator('#deck-save').getAttribute('aria-pressed'),'true');
-    assert.match(await page.locator('#gallery-status').innerText(),/Journal · frame 4 of 27/);
+    assert.match(await page.locator('#gallery-status').innerText(),/DNA carousel · frame 4 of 27/);
     assert.deepEqual(originals, [], 'original photos should load only in the viewer');
     await page.locator('#deck-open').click();
     assert.equal(await page.locator('#photo-save').getAttribute('aria-pressed'),'true');
@@ -26,7 +26,7 @@ const { chromium } = require(process.env.PLAYWRIGHT_MODULE || 'playwright');
     await page.locator('#photo-save').click();
     await page.keyboard.press('Escape');
     assert.equal(await page.locator('#deck-save').getAttribute('aria-pressed'),'false');
-    for (const mode of ['stack','shelf','grid']) {
+    for (const mode of ['dna','stack','shelf','grid']) {
       await page.locator(`[data-layout="${mode}"]`).click();
       await page.locator('.archive-tools').evaluate(e=>e.open=true);
       await page.locator('#photo-search').fill('no-matching-photo');

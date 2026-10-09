@@ -28,7 +28,8 @@
   function syncSave(button, photo) {
     button.disabled = !photo;
     const isSaved = photo && saved.has(photo.file);
-    button.textContent = isSaved ? '♥ Saved' : '♡ Save';
+    button.innerHTML = '<svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8L12 21l8.8-8.6a5.5 5.5 0 0 0 0-7.8Z"/></svg> ' + (isSaved ? 'Saved' : 'Save');
+    button.querySelector('svg').style.fill = isSaved ? 'currentColor' : 'none';
     button.setAttribute('aria-pressed', String(!!isSaved));
     button.setAttribute('aria-label', photo ? `${isSaved ? 'Unsave' : 'Save'} ${photo.title}` : 'Save photograph');
   }
@@ -128,7 +129,7 @@
     document.querySelector('#collection-progress').textContent = items.length ? `${count} of ${items.length} frames` : '';
     document.querySelector('#saved-count').textContent = saved.size;
     if (!items.length) {
-      const reset = document.createElement('button'); reset.className = 'filter-btn gallery-reset'; reset.textContent = 'Clear search & filters ↗';
+      const reset = document.createElement('button'); reset.className = 'filter-btn gallery-reset'; reset.textContent = 'Clear search & filters';
       reset.addEventListener('click', resetFilters);
       grid.append(reset);
     }
@@ -194,7 +195,7 @@
       let offset = index - position;
       if (count > 2) offset = ((offset + count/2) % count + count) % count - count/2;
       const distance = Math.abs(offset), direction = Math.sign(offset);
-      const visible = distance <= Math.min(mode === 'shelf' ? 6 : 5,Math.floor(count/2));
+      const visible = distance <= Math.min(width < 760 ? 3 : mode === 'shelf' ? 6 : 5,Math.floor(count/2));
       const selected = index === deckIndex;
       let x, y, z, rotateY, rotateZ, scale = 1, opacity = visible ? 1 : 0, blur = 0;
       if (mode === 'dna') {
@@ -217,7 +218,7 @@
       card.style.transform = `translate(-50%,-50%) translate3d(${x}px,${y}px,${z}px) rotateY(${rotateY}deg) rotateZ(${rotateZ}deg) scale(${scale})`;
       card.style.zIndex = String(100-Math.round(distance*10));
       card.style.opacity = String(opacity);
-      card.style.filter = mode === 'dna' ? `blur(${blur}px) drop-shadow(${-direction*2}px 0 0 rgba(255,58,116,${selected?0:.22})) drop-shadow(${direction*2}px 0 0 rgba(40,238,255,${selected?0:.2}))` : '';
+      card.style.filter = mode === 'dna' && width >= 760 && !isIOSDevice ? `blur(${blur}px) drop-shadow(${-direction*2}px 0 0 rgba(255,58,116,${selected?0:.22})) drop-shadow(${direction*2}px 0 0 rgba(40,238,255,${selected?0:.2}))` : '';
       card.style.visibility = visible ? 'visible' : 'hidden';
       card.style.pointerEvents = visible ? 'auto' : 'none';
       card.tabIndex = selected ? 0 : -1;
@@ -281,14 +282,14 @@
     clearInterval(autoplayTimer); autoplayTimer = 0;
     if (!autoplay) return;
     autoplayTimer = setInterval(() => {
-      if (mode === 'dna' && deckItems.length > 1 && motionAllowed() && !document.hidden && !stage.matches(':hover,:focus-within') && !stage.classList.contains('dragging')) selectDeck(deckIndex+1);
+      if (mode === 'dna' && deckItems.length > 1 && !matchMedia('(prefers-reduced-motion: reduce)').matches && !document.hidden && !stage.matches(':hover,:focus-within') && !stage.classList.contains('dragging')) selectDeck(deckIndex+1);
     }, 3200);
   }
   autoplayButton.addEventListener('click',()=>{
     autoplay = !autoplay;
     autoplayButton.setAttribute('aria-pressed',String(autoplay));
     autoplayButton.setAttribute('aria-label',autoplay?'Pause carousel autoplay':'Start carousel autoplay');
-    autoplayButton.textContent = autoplay ? 'Ⅱ Auto' : '▶ Auto';
+    autoplayButton.innerHTML = autoplay ? '<svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M8 4v16M16 4v16"/></svg> Auto' : '<svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7 4l14 8-14 8Z"/></svg> Auto';
     restartAutoplay();
   });
   document.querySelector('#deck-prev').addEventListener('click',()=>selectDeck(deckIndex-1));
@@ -300,33 +301,33 @@
     e.preventDefault();
     selectDeck(e.key==='Home'?0:e.key==='End'?deckItems.length-1:deckIndex+(e.key==='ArrowRight'?1:-1),true);
   });
-  let gesture=null, suppressClickUntil=0;
+  let gesture=null, suppressClickUntil=0, dragFrame=0;
   stage.addEventListener('pointerdown',e=>{
     if(e.button!==0||!e.isPrimary||deckItems.length<2)return;
-    gesture={x:e.clientX,y:e.clientY,lastX:e.clientX,lastTime:performance.now(),velocity:0,id:e.pointerId,dragging:false};
+    gesture={x:e.clientX,y:e.clientY,id:e.pointerId,dragging:false,dx:0,step:Math.max(90,Math.min(160,stage.clientWidth*.32))};
   });
   stage.addEventListener('pointermove',e=>{
     if(!gesture||e.pointerId!==gesture.id)return;
     const dx=e.clientX-gesture.x,dy=e.clientY-gesture.y;
+    if(!gesture.dragging && Math.abs(dy)>12 && Math.abs(dy)>=Math.abs(dx)){gesture=null;return;}
     if(!gesture.dragging&&Math.abs(dx)>12&&Math.abs(dx)>Math.abs(dy)){
       gesture.dragging=true;stage.setPointerCapture(e.pointerId);stage.classList.add('dragging');
     }
     if(gesture.dragging){
-      e.preventDefault();
-      const now=performance.now(),elapsed=Math.max(1,now-gesture.lastTime);
-      gesture.velocity=(e.clientX-gesture.lastX)/elapsed;gesture.lastX=e.clientX;gesture.lastTime=now;
-      paintDeck(deckIndex-dx/(mode==='dna'?105:130));
+      e.preventDefault();gesture.dx=dx;
+      if(!dragFrame)dragFrame=requestAnimationFrame(()=>{dragFrame=0;if(gesture)paintDeck(deckIndex-gesture.dx/gesture.step);});
     }
   });
   function finishGesture(e,cancel=false){
     if(!gesture||e.pointerId!==gesture.id)return;
-    const wasDragging=gesture.dragging,dx=e.clientX-gesture.x,velocity=gesture.velocity;
+    const wasDragging=gesture.dragging,dx=e.clientX-gesture.x,step=gesture.step;
+    cancelAnimationFrame(dragFrame);dragFrame=0;
     gesture=null;stage.classList.remove('dragging');
     if(stage.hasPointerCapture(e.pointerId))stage.releasePointerCapture(e.pointerId);
     if(wasDragging){
       suppressClickUntil=performance.now()+350;
-      const step=mode==='dna'?105:130, momentum=cancel?0:velocity*170;
-      selectDeck(cancel?deckIndex:deckIndex+Math.round((-dx-momentum)/step));
+      const advance=Math.abs(dx)>30 ? Math.sign(-dx)*Math.max(1,Math.round(Math.abs(dx)/step)) : 0;
+      selectDeck(cancel?deckIndex:deckIndex+advance);
     }
   }
   stage.addEventListener('pointerup',e=>finishGesture(e));

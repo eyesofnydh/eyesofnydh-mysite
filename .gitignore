@@ -9,3 +9,6 @@ Thumbs.db
 
 # Local dependency installs
 node_modules/
+
+# Deployable static build archives
+/dist/

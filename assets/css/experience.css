@@ -34,7 +34,7 @@ body {
   .focus-dial.active a { height: 80px; min-height: 64px; transform: none; opacity: 1; justify-content: start; gap: 18px; border-bottom: 1px solid #ffffff20; border-radius: 0; }
   .focus-dial.active .dial-label { writing-mode: horizontal-tb; transform: none; font-size: 30px; letter-spacing: -1px; text-transform: none; font-weight: 400; }
   .focus-dial.active .dial-stop { position:static; writing-mode: horizontal-tb; transform: none; font-size: 10px; }
-  .focus-dial.active a::after { content: '↗'; margin-left: auto; font-size: 24px; opacity: 0; transform: translate(-8px,8px); transition: opacity .3s,transform .3s; }
+  .focus-dial.active a::after { content: '↗︎'; margin-left: auto; font-size: 24px; opacity: 0; transform: translate(-8px,8px); transition: opacity .3s,transform .3s; }
   .focus-dial.active a:hover::after, .focus-dial.active a:focus-visible::after { opacity: 1; transform: none; }
 }
 .focus-dial.active a { animation: menu-arrive .65s both cubic-bezier(.16,1,.3,1); }
@@ -75,7 +75,7 @@ body {
 .collection-view .filter-btn { border-radius: 7px; }
 .photo-card { border: 0; box-shadow: none; background: transparent; backdrop-filter: none; padding: 0; border-radius: 0; }
 .photo-view { position: relative; border-radius: 6px; }
-.photo-view::after { content: 'VIEW FRAME ↗'; position: absolute; left: 18px; bottom: 18px; padding: 12px 18px; background: #122b45ad; color: white; border: 1px solid #ffffff55; backdrop-filter: blur(14px); font: 9px/1.5 'Segoe UI',sans-serif; letter-spacing: 2px; border-radius: 5px; opacity: 0; transform: translateY(10px); transition: transform .4s,opacity .4s; }
+.photo-view::after { content: 'VIEW FRAME ↗︎'; position: absolute; left: 18px; bottom: 18px; padding: 12px 18px; background: #122b45ad; color: white; border: 1px solid #ffffff55; backdrop-filter: blur(14px); font: 9px/1.5 'Segoe UI',sans-serif; letter-spacing: 2px; border-radius: 5px; opacity: 0; transform: translateY(10px); transition: transform .4s,opacity .4s; }
 .photo-view:is(:hover,:focus-visible)::after { opacity: 1; transform: none; }
 .photo-info { border-bottom: 1px solid #d5edff26; padding: 21px 75px 22px 0; }
 .photo-info h3 { font-size: 21px; font-weight: 400; }

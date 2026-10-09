@@ -9,7 +9,7 @@ Nidhin Narayanan’s photography portfolio. Plain HTML, CSS, and JavaScript, wit
 - A scroll-linked cinematic hero, DNA-style 3D carousel, photo stack, record shelf, photo wall, search, filters, saved photos, and shareable photo pages.
 - A typography-led cursor image trail and image-only Travel folders with peeking, staggered polaroid windows.
 - Journey is a photo collection with optional short details and personal opinions, rather than a blog. It includes series filters, a show/hide notes control, and a keyboard/swipe photo viewer.
-- Subtle photo and section entrances, hover effects, Pause motion, and system reduced-motion support.
+- Subtle photo and section entrances, hover effects, and automatic system reduced-motion support. No separate iOS motion control is required.
 - Existing photographs remain accessible without JavaScript. No client testimonials or unverified service promises are displayed.
 
 ## Preview and build
@@ -56,15 +56,16 @@ With the preview server running and Playwright installed:
 ```sh
 node tests/refinement.cjs
 node tests/gallery-ui.cjs
+node tests/safari.cjs
 node tests/improvements.cjs
 python tests/travel-build.py
 python tools/build-travel.py --check
 python tools/build-seo.py --check
 ```
 
-`refinement.cjs` covers mobile/desktop navigation, seven widths from 320 to 1920 pixels, short landscape screens, image loading, local anchors, search, viewers, Journey filters/notes, focus restoration, deep links, motion preference persistence, and JavaScript-free browsing. Screenshots are saved under `tests/` and ignored by Git.
+`refinement.cjs` covers mobile/desktop navigation, seven widths from 320 to 1920 pixels, short landscape screens, image loading, local anchors, search, viewers, Journey filters/notes, focus restoration, deep links, system reduced-motion changes, and JavaScript-free browsing. Screenshots are saved under `tests/` and ignored by Git.
 
-The gallery suites cover card layout, search recovery, saved photos, original-image viewing, sharing, blocked storage, and keyboard editing. Older camera-dial, lens-fan, and travel-article suites describe the previous design; `refinement.cjs` replaces those design-specific checks.
+The gallery suites cover card layout, search recovery, saved photos, original-image viewing, sharing, blocked storage, and keyboard editing. `safari.cjs` checks WebKit and Chromium at five mobile widths, SVG icons, menu bounds, gallery gestures, and reduced motion. Older camera-dial, lens-fan, and travel-article suites describe the previous design; `refinement.cjs` replaces those design-specific checks.
 
 ## Production
 

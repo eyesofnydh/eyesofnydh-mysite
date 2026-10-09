@@ -1,30 +1,12 @@
 'use strict';
 (() => {
   const preference = matchMedia('(prefers-reduced-motion: reduce)');
-  const toggle = document.querySelector('.journey-motion');
   const isIOSDevice = /iP(?:ad|hone|od)/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1 && /Mobile\//.test(navigator.userAgent));
   if (isIOSDevice) document.documentElement.classList.add('is-ios');
-  let paused = false;
-  try { paused = localStorage.getItem('nydh-motion-paused') === 'true'; } catch {}
-  const motionAllowed = () => !isIOSDevice && !paused && !preference.matches;
+  const motionAllowed = () => !isIOSDevice && !preference.matches;
   function syncMotion() {
-    document.body.classList.toggle('motion-paused', isIOSDevice || paused || preference.matches);
-    if (toggle) {
-      toggle.textContent = isIOSDevice ? 'iOS motion safe' : preference.matches ? 'Reduced motion' : paused ? 'Enable motion' : 'Pause motion';
-      toggle.disabled = preference.matches || isIOSDevice;
-      toggle.setAttribute('aria-pressed', String(isIOSDevice || paused || preference.matches));
-      toggle.title = isIOSDevice ? 'Heavy effects are disabled on iOS so scrolling and controls stay smooth.' : '';
-    }
+    document.body.classList.toggle('motion-paused', isIOSDevice || preference.matches);
     if (!motionAllowed()) document.getAnimations().forEach(animation => animation.cancel());
-  }
-  if (toggle) {
-    toggle.hidden = false;
-    toggle.addEventListener('click', () => {
-      if (isIOSDevice) return;
-      paused = !paused;
-      try { localStorage.setItem('nydh-motion-paused', String(paused)); } catch {}
-      syncMotion();
-    });
   }
   preference.addEventListener('change', syncMotion);
   syncMotion();

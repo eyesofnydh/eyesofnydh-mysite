@@ -180,8 +180,8 @@ html:has(.journey-page.motion-paused) { scroll-behavior: auto; }
 .journey-page .journey-section,.journey-page .journey-story { scroll-margin-top: calc(var(--journey-header-height,88px) + 78px); }
 .journey-page { --journey-header-height: 88px; }
 .journey-destination .journey-image-link { border-radius: 2px; }
-.journey-destination .journey-image-link::after,.journey-moments .journey-image-link::after { content: 'EXPLORE THE CHAPTER ↗'; position: absolute; bottom: 18px; left: 18px; padding: 10px 14px; font: 11px/1.5 monospace; letter-spacing: 1px; background: #101b30ed; color: #e8f3ff; transform: translateY(8px); opacity: 0; transition: opacity .25s,transform .25s; }
-.journey-moments .journey-image-link::after { content: 'VIEW PHOTOGRAPH ↗'; }
+.journey-destination .journey-image-link::after,.journey-moments .journey-image-link::after { content: 'EXPLORE THE CHAPTER ↗︎'; position: absolute; bottom: 18px; left: 18px; padding: 10px 14px; font: 11px/1.5 monospace; letter-spacing: 1px; background: #101b30ed; color: #e8f3ff; transform: translateY(8px); opacity: 0; transition: opacity .25s,transform .25s; }
+.journey-moments .journey-image-link::after { content: 'VIEW PHOTOGRAPH ↗︎'; }
 .journey-image-link:is(:hover,:focus-visible)::after { opacity: 1; transform: none; }
 .journey-memory figure { overflow: hidden; }
 .journey-memory img { transition: transform .7s ease; }

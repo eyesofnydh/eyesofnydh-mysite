@@ -27,7 +27,7 @@ jobs:
       - name: Install browser test runner
         run: |
           npm install --no-save playwright
-          npx playwright install --with-deps chromium
+          npx playwright install --with-deps chromium webkit
       - name: Run browser validation
         shell: bash
         run: |
@@ -38,3 +38,5 @@ jobs:
           node tests/refinement.cjs
           node tests/gallery-ui.cjs
           node tests/improvements.cjs
+          node tests/ios-motion.cjs
+          node tests/safari.cjs

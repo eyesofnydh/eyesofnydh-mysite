@@ -56,7 +56,7 @@ def destination(item, index):
     return f'''<article class="journey-destination" id="place-{item['id']}">
       <a class="journey-image-link" href="#story-{item['id']}" aria-label="Read the {esc(item['destination'])} story">{photo(item.get('image'))}<span class="journey-image-index" aria-hidden="true">{index:02d}</span></a>
       <div class="journey-meta"><span>{esc(item['region'])}</span><span>{esc(item['year'])}</span></div>
-      <h3><a href="#story-{item['id']}">{esc(item['destination'])} <span aria-hidden="true">↗</span></a></h3>
+      <h3><a href="#story-{item['id']}">{esc(item['destination'])} <span aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7 17 17 7M7 7h10v10"/></svg></span></a></h3>
       <p>{esc(item.get('description') or 'A new chapter, waiting to be written.')}</p>
     </article>'''
 
@@ -65,15 +65,15 @@ def story(item):
     paragraphs = ''.join(f'<p>{esc(p)}</p>' for p in item['story']) or '<p>The full story is still being written. Come back for the next chapter.</p>'
     images = ''.join(f'<figure>{photo(file)}<figcaption>{esc(PHOTOS.get(file, {}).get("title", "Photograph to be added"))}</figcaption></figure>' for file in item['photos'][:3])
     return f'''<details class="journey-story" id="story-{item['id']}">
-      <summary><span class="journey-meta">{esc(item['destination'])} / {esc(item['date'])}</span><h3>{esc(item.get('headline') or item['destination'])}</h3><span class="journey-story-toggle" aria-hidden="true">↗</span></summary>
+      <summary><span class="journey-meta">{esc(item['destination'])} / {esc(item['date'])}</span><h3>{esc(item.get('headline') or item['destination'])}</h3><span class="journey-story-toggle" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7 17 17 7M7 7h10v10"/></svg></span></summary>
       <div class="journey-story-body"><figure class="journey-story-hero">{photo(item.get('image'), sizes='90vw')}<figcaption>{esc(item['destination'])} · {esc(item['date'])} · {esc(item['duration'])}</figcaption></figure>
       <div class="journey-prose"><p class="journey-lead">{esc(item.get('introduction') or item.get('description'))}</p>{paragraphs}<h4>Along the way</h4><p>{esc(item.get('details') or 'Travel details to be added.')}</p><h4>The part I kept</h4><blockquote>{esc(item['memory'])}</blockquote></div>
-      <div class="journey-story-photos">{images}</div><a class="journey-text-link" href="#places">Back to the places ↑</a></div>
+      <div class="journey-story-photos">{images}</div><a class="journey-text-link" href="#places">Back to the places <svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 20V4m-6 6 6-6 6 6"/></svg></a></div>
     </details>'''
 
 
 def memory(item, index):
-    return f'''<article class="journey-memory"><figure>{photo(item.get('image'))}</figure><div><p class="journey-meta">MEMORY {index:02d} / {esc(item['destination'])} / {esc(item['date'])}</p><blockquote>“{esc(item['memory'])}”</blockquote><a class="journey-text-link" href="#story-{item['id']}">Read this chapter ↗</a></div></article>'''
+    return f'''<article class="journey-memory"><figure>{photo(item.get('image'))}</figure><div><p class="journey-meta">MEMORY {index:02d} / {esc(item['destination'])} / {esc(item['date'])}</p><blockquote>“{esc(item['memory'])}”</blockquote><a class="journey-text-link" href="#story-{item['id']}">Read this chapter <svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7 17 17 7M7 7h10v10"/></svg></a></div></article>'''
 
 
 def travel_map(items):
@@ -96,8 +96,8 @@ def travel_map(items):
         coordinate_label = f'{abs(lat):.4f}° {"N" if lat >= 0 else "S"} / {abs(lng):.4f}° {"E" if lng >= 0 else "W"}'
         points.append(f'{x*6:.1f},{y*4:.1f}')
         markers.append(f'<a class="journey-map-marker" href="#story-{item["id"]}" data-stop="{item["id"]}" style="left:{x:.2f}%;top:{y:.2f}%" aria-label="Explore {esc(item["destination"])}"><span>{index+1:02d}</span></a>')
-        panels.append(f'''<article class="journey-map-detail" id="map-{item['id']}" {'' if index == 0 else 'hidden'}><figure>{photo(item.get('image'))}</figure><p class="journey-meta">{esc(item['date'])} · {coordinate_label}</p><h3>{esc(item['destination'])}</h3><p>{esc(item['memory'])}</p><a class="journey-text-link" href="#story-{item['id']}">Read the story ↗</a></article>''')
-    return f'''<div class="journey-map-layout"><div class="journey-map-plot" role="group" aria-label="Destination map. Select a numbered location to explore it."><svg viewBox="0 0 600 400" preserveAspectRatio="none" aria-hidden="true"><defs><pattern id="map-grid" width="60" height="50" patternUnits="userSpaceOnUse"><path d="M 60 0 L 0 0 0 50" fill="none" stroke="currentColor" stroke-width=".5"/></pattern></defs><rect width="600" height="400" fill="url(#map-grid)"/><polyline points="{' '.join(points)}" fill="none" stroke="#b4f5ed" stroke-width="1.5" stroke-dasharray="4 8"/></svg><span class="journey-map-north" aria-hidden="true">N ↑</span>{''.join(markers)}<span class="journey-map-key">A location sketch<br>Approximate positions · not a route</span></div><div class="journey-map-details">{''.join(panels)}</div></div><p class="journey-map-status visually-hidden" role="status"></p>'''
+        panels.append(f'''<article class="journey-map-detail" id="map-{item['id']}" {'' if index == 0 else 'hidden'}><figure>{photo(item.get('image'))}</figure><p class="journey-meta">{esc(item['date'])} · {coordinate_label}</p><h3>{esc(item['destination'])}</h3><p>{esc(item['memory'])}</p><a class="journey-text-link" href="#story-{item['id']}">Read the story <svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7 17 17 7M7 7h10v10"/></svg></a></article>''')
+    return f'''<div class="journey-map-layout"><div class="journey-map-plot" role="group" aria-label="Destination map. Select a numbered location to explore it."><svg viewBox="0 0 600 400" preserveAspectRatio="none" aria-hidden="true"><defs><pattern id="map-grid" width="60" height="50" patternUnits="userSpaceOnUse"><path d="M 60 0 L 0 0 0 50" fill="none" stroke="currentColor" stroke-width=".5"/></pattern></defs><rect width="600" height="400" fill="url(#map-grid)"/><polyline points="{' '.join(points)}" fill="none" stroke="#b4f5ed" stroke-width="1.5" stroke-dasharray="4 8"/></svg><span class="journey-map-north" aria-hidden="true">N <svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 20V4m-6 6 6-6 6 6"/></svg></span>{''.join(markers)}<span class="journey-map-key">A location sketch<br>Approximate positions · not a route</span></div><div class="journey-map-details">{''.join(panels)}</div></div><p class="journey-map-status visually-hidden" role="status"></p>'''
 
 
 def trip_folders(data):
@@ -157,9 +157,9 @@ def render_home_preview(data):
     template = (ROOT/'tools/travel-home-template.html').read_text(encoding='utf-8')
     if data.get('sample',True):
         template = template.replace('class="journey-preview-chapters"','class="journey-preview-chapters" data-nosnippet')
-    chapters = ''.join(f'<a href="./travel.html#story-{item["id"]}"><span class="journey-preview-number">{index+1:02d}</span><span><strong>{esc(item["destination"])}</strong><small>{esc(item["region"])} · {esc(item["year"])}</small></span><span aria-hidden="true">↗</span></a>' for index,item in enumerate(items[:3]))
+    chapters = ''.join(f'<a href="./travel.html#story-{item["id"]}"><span class="journey-preview-number">{index+1:02d}</span><span><strong>{esc(item["destination"])}</strong><small>{esc(item["region"])} · {esc(item["year"])}</small></span><span aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7 17 17 7M7 7h10v10"/></svg></span></a>' for index,item in enumerate(items[:3]))
     if data.get('trips'):
-        chapters = ''.join(f'<a href="./travel.html#trip-{esc(trip["id"])}"><span class="journey-preview-number">{index+1:02d}</span><span><strong>{esc(trip["name"])}</strong><small>Open the trip folder</small></span><span aria-hidden="true">&#8599;</span></a>' for index,trip in enumerate(data['trips']))
+        chapters = ''.join(f'<a href="./travel.html#trip-{esc(trip["id"])}"><span class="journey-preview-number">{index+1:02d}</span><span><strong>{esc(trip["name"])}</strong><small>Open the trip folder</small></span><span aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7 17 17 7M7 7h10v10"/></svg></span></a>' for index,trip in enumerate(data['trips']))
     values = {'MAIN_PHOTO': photo(photos[0] if photos else None), 'SIDE_PHOTO': photo(photos[1] if len(photos)>1 else None), 'CHAPTERS': chapters, 'NOTE': 'A preview of the journal · sample trips and archive photographs for now.' if data.get('sample',True) else 'Photographs, small details, and personal notes.'}
     for key,value in values.items():
         template=template.replace('{{'+key+'}}',value)

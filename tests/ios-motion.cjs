@@ -16,9 +16,7 @@ const {chromium} = require(process.env.PLAYWRIGHT_MODULE || 'playwright');
 
     await page.goto(process.env.SITE_URL || 'http://localhost:4173');
     assert(await page.locator('html').evaluate(element=>element.classList.contains('is-ios')));
-    assert.equal(await page.locator('#motion-toggle').innerText(),'iOS motion safe');
-    assert.equal(await page.locator('#motion-toggle').getAttribute('aria-disabled'),'true');
-    assert.equal(await page.locator('.page-transition').evaluate(element=>getComputedStyle(element).display),'none');
+    assert.equal(await page.locator('#motion-toggle').count(),0);
     await page.locator('#scene-next').click();
     assert.match(await page.locator('#scene-title').innerText(),/02/);
     assert.equal(await page.locator('#scene-image').evaluate(element=>element.getAnimations().length),0);
@@ -52,7 +50,7 @@ const {chromium} = require(process.env.PLAYWRIGHT_MODULE || 'playwright');
     const ipadPage=await ipad.newPage();
     await ipadPage.goto('http://localhost:4173');
     assert(await ipadPage.locator('html').evaluate(element=>element.classList.contains('is-ios')));
-    assert.equal(await ipadPage.locator('#motion-toggle').innerText(),'iOS motion safe');
+    assert.equal(await ipadPage.locator('#motion-toggle').count(),0);
     await ipad.close();
     console.log('PASS: iPhone compatibility mode keeps navigation, scenes, travel and photo pages stable without heavy motion.');
   } finally { await browser.close(); }

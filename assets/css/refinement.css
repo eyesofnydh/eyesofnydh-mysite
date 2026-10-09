@@ -74,11 +74,10 @@ body:not(.journey-page) .container { width:min(1400px,calc(100% - 96px)); margin
   .journey-moments { grid-template-columns:repeat(2,minmax(0,1fr)); }
 }
 @media(max-width:760px) {
-  /* Keep one menu affordance visible at a time: the header at the top, then
-     the floating lens once the visitor has started scrolling. */
+  /* The header Menu remains available throughout mobile browsing. */
   .mobile-lens:not(.is-minimized):not(.is-open) { opacity:0; pointer-events:none; visibility:hidden; }
   .mobile-lens.is-at-contact:not(.is-open) { opacity:0; pointer-events:none; visibility:hidden; }
-  body:has(.mobile-lens.is-minimized:not(.is-at-contact)) .nav-open-btn { opacity:0; pointer-events:none; visibility:hidden; }
+  .nav-open-btn { opacity:1; pointer-events:auto; visibility:visible; }
   body:not(.journey-page) .container,.journey-page .container,.journey-page .journey-nav { width:calc(100% - 40px); margin-inline:auto; }
   body:not(.journey-page) .header-inner { gap:8px; flex-wrap:nowrap; min-height:76px; padding-block:12px; }
   .header-inner .motion-toggle { font-size:10px; min-width:0; padding:8px; }
@@ -570,4 +569,34 @@ body:not(.journey-page) .container { width:min(1400px,calc(100% - 96px)); margin
   .lens-options { inset:0; }
   .lens-options a { min-height:50px; padding:6px 5px; }
   .lens-toggle { width:62px; height:62px; bottom:10px; }
+}
+
+/* Stable iPhone layout: an opaque header and native vertical page scrolling. */
+html { -webkit-text-size-adjust:100%; text-size-adjust:100%; }
+.deck-stage { touch-action:pan-y pinch-zoom; }
+.deck-card { -webkit-backface-visibility:hidden; }
+@media(max-width:760px) {
+  .header,.is-ios .header { background:#101b30; -webkit-backdrop-filter:none; backdrop-filter:none; }
+  .header-inner { padding-top:max(12px,env(safe-area-inset-top,0px)); height:auto; }
+  .section { scroll-margin-top:16px; }
+  .deck-card { transition:transform .32s cubic-bezier(.22,.75,.15,1),opacity .2s; }
+  .deck-stage.dragging .deck-card { transition:none; }
+  .deck-hint { font:11px/1.7 var(--sans); letter-spacing:0; }
+  #deck-category { font-size:10px; letter-spacing:1px; overflow-wrap:anywhere; }
+  /* The persistent header already provides Menu; keep photographs unobstructed. */
+  .mobile-lens:not(.is-open) { display:none; }
+  .mobile-lens.is-open { bottom:calc(16px + env(safe-area-inset-bottom,0px)); }
+  .journey-preview-intro,.chapter-copy,.contact > div { min-width:0; }
+  .journey-preview-cta,.hero-actions a { max-width:100%; }
+}
+@media(prefers-reduced-motion:reduce) { .deck-card { transition:none!important; } }
+/* Carousel transitions remain useful on iOS; decorative effects stay simplified. */
+@media(prefers-reduced-motion:no-preference) {
+  .is-ios #archive-deck .deck-card { transition-duration:.32s,.2s!important; transition-delay:0s!important; }
+  .is-ios #archive-deck .deck-stage.dragging .deck-card { transition:none!important; }
+}
+@media(max-width:760px) {
+  #archive-deck[data-mode=dna] .deck-card { transition:transform .32s cubic-bezier(.22,.75,.15,1),opacity .2s; }
+  #archive-deck[data-mode=dna] .deck-stage.dragging .deck-card { transition:none; }
+  #archive-deck[data-mode=dna] .deck-stage::before { filter:none; }
 }
