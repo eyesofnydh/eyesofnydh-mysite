@@ -239,7 +239,7 @@ h2 {
 }
 .text-link {
   display:inline-flex;
-  gap:24px;
+  gap:8px;
   align-items:center;
   font-size:13px;
   font-weight:600;

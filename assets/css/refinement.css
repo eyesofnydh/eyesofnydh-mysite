@@ -600,3 +600,26 @@ html { -webkit-text-size-adjust:100%; text-size-adjust:100%; }
   #archive-deck[data-mode=dna] .deck-stage.dragging .deck-card { transition:none; }
   #archive-deck[data-mode=dna] .deck-stage::before { filter:none; }
 }
+
+/* Keep action icons attached to their labels. */
+.text-link,.journey-text-link,.chapter-open,.journey-preview-cta,.btn,.deck-open,.card-btn { gap:8px; justify-content:flex-start; }
+.text-link .ui-icon,.journey-text-link .ui-icon,.chapter-open .ui-icon,.btn .ui-icon { margin-left:0; }
+
+/* A compact focus barrel, seen from the side, with a fixed selection pointer. */
+@media(min-width:761px) {
+  .header .focus-dial:not(.active) { width:72px; height:min(340px,calc(100dvh - 48px)); padding:14px 5px; border:1px solid #ffffff08; border-radius:12px; background:repeating-linear-gradient(0deg,#08090b 0 3px,#141517 3px 4px),#090a0c; box-shadow:inset 6px 0 14px #000b,inset -6px 0 14px #000b,0 10px 28px #0007; backdrop-filter:none; -webkit-backdrop-filter:none; }
+  .focus-dial:not(.active) .dial-caption { display:none; }
+  .focus-dial:not(.active) .dial-window { height:100%; flex:1; mask-image:linear-gradient(transparent,#000 20%,#000 80%,transparent); }
+  .focus-dial:not(.active) .dial-track { top:calc(50% - 38px); }
+  .focus-dial:not(.active) a { height:76px; min-height:76px; color:#bebfc3; }
+  .focus-dial:not(.active) a[aria-current] { color:#fff; background:none; }
+  .focus-dial:not(.active) .dial-label { font-size:9px; font-weight:700; letter-spacing:1.8px; margin-left:30px; }
+  .focus-dial:not(.active) .dial-stop { color:#77797d; left:11px; font-size:7px; }
+  .focus-dial:not(.active) .dial-marker { left:4px; right:4px; height:56px; border:0; background:none; }
+  .focus-dial:not(.active) .dial-marker::before { top:24px; left:0; border-left:7px solid white; border-top:5px solid transparent; border-bottom:5px solid transparent; filter:drop-shadow(0 0 3px #fff6); }
+  .focus-dial:not(.active) .dial-marker::after { content:''; position:absolute; left:-1px; top:-17px; width:24px; height:24px; background:linear-gradient(#f9c922,#f9c922) left top/8px 2px no-repeat,linear-gradient(#f9c922,#f9c922) left top/2px 8px no-repeat,linear-gradient(#f9c922,#f9c922) right top/8px 2px no-repeat,linear-gradient(#f9c922,#f9c922) right top/2px 8px no-repeat,linear-gradient(#f9c922,#f9c922) left bottom/8px 2px no-repeat,linear-gradient(#f9c922,#f9c922) left bottom/2px 8px no-repeat,linear-gradient(#f9c922,#f9c922) right bottom/8px 2px no-repeat,linear-gradient(#f9c922,#f9c922) right bottom/2px 8px no-repeat,radial-gradient(circle,#f9c922 0 2px,transparent 2.5px) center/100% 100% no-repeat; }
+  .header .focus-dial.active { width:min(288px,calc(100vw - 40px)); height:min(470px,calc(100dvh - 40px)); padding:20px; border-radius:16px; background:#101216; }
+  .focus-dial.active a { height:52px; min-height:52px; gap:12px; }
+  .focus-dial.active .dial-label { font-size:21px; }
+  .focus-dial.active a::after { margin-left:0; font-size:18px; }
+}
